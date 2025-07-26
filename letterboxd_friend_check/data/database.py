@@ -319,10 +319,41 @@ def save_movie_data(title: str, data: Dict[str, Any], db_path: Optional[str] = N
     # Add movie_id to values
     update_values.append(movie_id)
 
-    # Execute update
+    # Execute update using explicit column updates to prevent SQL injection
     if update_columns:
-        query = f"UPDATE movies SET {', '.join(update_columns)} WHERE movie_id = ?"
-        c.execute(query, update_values)
+        # [2025-07-26 GitHub Copilot] Ultra-secure SQL approach - individual updates (B608 fix)
+        # Use separate UPDATE statement for each column to avoid string construction
+        movie_id = update_values[-1]  # Last value is always movie_id
+        
+        for i, col in enumerate(update_columns):
+            value = update_values[i]
+            if col == "director = ?":
+                c.execute("UPDATE movies SET director = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "genres = ?":
+                c.execute("UPDATE movies SET genres = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "rating = ?":
+                c.execute("UPDATE movies SET rating = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "synopsis = ?":
+                c.execute("UPDATE movies SET synopsis = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "tmdb_id = ?":
+                c.execute("UPDATE movies SET tmdb_id = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "tmdb_rating = ?":
+                c.execute("UPDATE movies SET tmdb_rating = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "release_date = ?":
+                c.execute("UPDATE movies SET release_date = ? WHERE movie_id = ?",
+                          [value, movie_id])
+            elif col == "runtime = ?":
+                c.execute("UPDATE movies SET runtime = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "poster_path = ?":
+                c.execute("UPDATE movies SET poster_path = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "backdrop_path = ?":
+                c.execute("UPDATE movies SET backdrop_path = ? WHERE movie_id = ?",
+                          [value, movie_id])
+            elif col == "overview = ?":
+                c.execute("UPDATE movies SET overview = ? WHERE movie_id = ?", [value, movie_id])
+            elif col == "last_updated = ?":
+                c.execute("UPDATE movies SET last_updated = ? WHERE movie_id = ?",
+                          [value, movie_id])
 
     conn.commit()
     conn.close()
