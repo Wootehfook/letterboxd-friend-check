@@ -72,7 +72,7 @@ jobs:
           if find . -name "*.py" -type f | grep -q .; then
             echo "Found Python files to lint:"
             find . -name "*.py" -type f | head -10
-            find . -name "*.py" -type f -exec pylint {} + --errors-only
+            find . -name "*.py" -type f -exec pylint --errors-only {} +
           else
             echo "No Python files found to lint"
           fi
