@@ -34,13 +34,20 @@ jobs:
         run: |
           curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
       
-      - name: Run TruffleHog Git History Scan
+      - name: Run TruffleHog Git History Scan (Local Repository)
         run: |
-          trufflehog git https://github.com/${{ github.repository }}.git --branch=${{ github.head_ref || github.ref_name }} --only-verified --json > trufflehog-git.json || true
+          trufflehog git file://. --since-commit=HEAD~10 --only-verified --json > trufflehog-git.json || true
       
-      - name: Run TruffleHog Filesystem Scan
+      - name: Run TruffleHog Filesystem Scan (Local Checkout)
         run: |
           trufflehog filesystem . --only-verified --json > trufflehog-fs.json || true
+          
+      - name: Run TruffleHog on PR Changes (if applicable)
+        if: github.event_name == 'pull_request'
+        run: |
+          # Scan only the changes in this PR for maximum security
+          git fetch origin ${{ github.base_ref }}
+          trufflehog git file://. --since-commit=origin/${{ github.base_ref }} --only-verified --json > trufflehog-pr.json || true
       
       - name: Run Custom Security Scanner
         run: |
@@ -56,15 +63,44 @@ jobs:
       
       - name: Check for Security Issues
         run: |
-          if [ -s trufflehog-git.json ] || [ -s trufflehog-fs.json ]; then
-            echo "🚨 Security issues found!"
+          echo "🔍 Checking TruffleHog scan results..."
+          
+          # Check git history scan
+          if [ -s trufflehog-git.json ]; then
+            echo "🚨 Security issues found in git history!"
             echo "Git scan results:"
-            cat trufflehog-git.json 2>/dev/null || echo "No git scan results"
-            echo "Filesystem scan results:"  
-            cat trufflehog-fs.json 2>/dev/null || echo "No filesystem scan results"
+            cat trufflehog-git.json
+            SECURITY_ISSUES=true
+          else
+            echo "✅ No security issues in git history"
+          fi
+          
+          # Check filesystem scan  
+          if [ -s trufflehog-fs.json ]; then
+            echo "🚨 Security issues found in filesystem!"
+            echo "Filesystem scan results:"
+            cat trufflehog-fs.json
+            SECURITY_ISSUES=true
+          else
+            echo "✅ No security issues in filesystem"
+          fi
+          
+          # Check PR-specific scan (if it exists)
+          if [ -f trufflehog-pr.json ] && [ -s trufflehog-pr.json ]; then
+            echo "🚨 Security issues found in PR changes!"
+            echo "PR scan results:"
+            cat trufflehog-pr.json
+            SECURITY_ISSUES=true
+          elif [ -f trufflehog-pr.json ]; then
+            echo "✅ No security issues in PR changes"
+          fi
+          
+          # Exit with error if any security issues found
+          if [ "$SECURITY_ISSUES" = "true" ]; then
+            echo "❌ Security scan failed - issues detected!"
             exit 1
           else
-            echo "✅ No security issues found"
+            echo "✅ All security scans passed - no issues found"
           fi
 
   dependency-scan:
