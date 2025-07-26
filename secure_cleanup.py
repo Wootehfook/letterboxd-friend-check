@@ -191,7 +191,7 @@ def main():
 
     if args.cleanup:
         print("🚨 LIVE CLEANUP MODE - Files will be permanently deleted!")
-        
+
         # Secure input validation for destructive operation
         while True:
             try:

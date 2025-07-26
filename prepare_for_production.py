@@ -419,21 +419,21 @@ def main():
     print("=" * 60)
 
     print("\n⚠️  WARNING: This will remove personal data and test files!")
-    
+
     # Secure input validation for confirmation
     while True:
         try:
             # nosec B601 # Safe confirmation input with validation
             response = input("Continue? (y/N): ").strip().lower()
-            if response in ['y', 'yes', 'n', 'no', '']:
+            if response in ["y", "yes", "n", "no", ""]:
                 break
             print("❌ Please respond with 'y' for yes or 'n' for no")
         except (EOFError, KeyboardInterrupt):
             print("\n❌ Operation cancelled by user")
-            response = 'n'
+            response = "n"
             break
 
-    if response not in ['y', 'yes']:
+    if response not in ["y", "yes"]:
         print("❌ Production preparation cancelled.")
         return
 

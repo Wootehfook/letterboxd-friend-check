@@ -71,42 +71,42 @@ except ImportError:
 def validate_username_input(prompt: str, max_length: int = 50) -> str:
     """
     Securely get username input with validation.
-    
+
     Args:
         prompt: The prompt to display to the user
         max_length: Maximum allowed length for the input
-        
+
     Returns:
         Validated username string
     """
     while True:
         try:
             user_input = input(prompt).strip()  # nosec B601 # Safe CLI input validation
-            
+
             # Check for exit command
-            if user_input.lower() == 'exit':
+            if user_input.lower() == "exit":
                 return user_input
-            
+
             # Validate length
             if len(user_input) > max_length:
                 print(f"❌ Username too long (max {max_length} characters)")
                 continue
-                
+
             # Validate username format (alphanumeric, underscore, hyphen)
-            if not re.match(r'^[a-zA-Z0-9_-]+$', user_input):
+            if not re.match(r"^[a-zA-Z0-9_-]+$", user_input):
                 print("❌ Username can only contain letters, numbers, underscores, and hyphens")
                 continue
-                
+
             # Check minimum length
             if len(user_input) < 1:
                 print("❌ Username cannot be empty")
                 continue
-                
+
             return user_input
-            
+
         except (EOFError, KeyboardInterrupt):
             print("\n❌ Input cancelled by user")
-            return 'exit'
+            return "exit"
         except Exception as e:
             print(f"❌ Input error: {e}")
             continue
@@ -115,23 +115,23 @@ def validate_username_input(prompt: str, max_length: int = 50) -> str:
 def validate_menu_choice(prompt: str, valid_choices: list) -> str:
     """
     Securely get menu choice input with validation.
-    
+
     Args:
         prompt: The prompt to display to the user
         valid_choices: List of valid choice strings
-        
+
     Returns:
         Validated choice string
     """
     while True:
         try:
             choice = input(prompt).strip()  # nosec B601 # Safe CLI menu validation
-            
+
             if choice in valid_choices:
                 return choice
-                
+
             print(f"❌ Invalid choice. Please select one of: {', '.join(valid_choices)}")
-            
+
         except (EOFError, KeyboardInterrupt):
             print("\n❌ Input cancelled by user")
             return valid_choices[-1] if valid_choices else ""
@@ -143,29 +143,29 @@ def validate_menu_choice(prompt: str, valid_choices: list) -> str:
 def validate_confirmation_input(prompt: str, expected_values: list = None) -> str:
     """
     Securely get confirmation input with validation.
-    
+
     Args:
         prompt: The prompt to display to the user
         expected_values: List of valid confirmation values (default: ['y', 'yes', 'n', 'no'])
-        
+
     Returns:
         Validated confirmation string (lowercase)
     """
     if expected_values is None:
-        expected_values = ['y', 'yes', 'n', 'no']
-    
+        expected_values = ["y", "yes", "n", "no"]
+
     while True:
         try:
             response = input(prompt).strip().lower()  # nosec B601 # Safe confirmation input
-            
+
             if response in expected_values:
                 return response
-                
+
             print(f"❌ Please respond with one of: {', '.join(expected_values)}")
-            
+
         except (EOFError, KeyboardInterrupt):
             print("\n❌ Input cancelled by user")
-            return 'n'  # Default to 'no' for safety
+            return "n"  # Default to 'no' for safety
         except Exception as e:
             print(f"❌ Input error: {e}")
             continue

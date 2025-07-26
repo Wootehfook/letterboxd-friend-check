@@ -20,7 +20,7 @@ class MenuMethods:
     Required attributes/methods that must be provided by the inheriting class:
     - friends_watchlists: dict containing friend watchlist data
     - on_close(): method to handle application closing
-    
+
     Optional attributes that may be provided by the inheriting class:
     - username: str - current user's Letterboxd username
     - friends: list/dict - user's friends data
