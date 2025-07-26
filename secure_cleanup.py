@@ -191,10 +191,22 @@ def main():
 
     if args.cleanup:
         print("🚨 LIVE CLEANUP MODE - Files will be permanently deleted!")
-        confirm = input("Are you sure? Type 'yes' to continue: ")
-        if confirm.lower() != "yes":
-            print("❌ Cleanup cancelled.")
-            return
+        
+        # Secure input validation for destructive operation
+        while True:
+            try:
+                # nosec B601 # Safe confirmation for file deletion with strict validation
+                confirm = input("Are you sure? Type 'yes' to continue: ")
+                if confirm.lower() == "yes":
+                    break
+                elif confirm.lower() in ["no", "n", ""]:
+                    print("❌ Cleanup cancelled.")
+                    return
+                else:
+                    print("❌ You must type exactly 'yes' to proceed with deletion")
+            except (EOFError, KeyboardInterrupt):
+                print("\n❌ Cleanup cancelled by user")
+                return
 
         results = cleanup.cleanup_safe_files(dry_run=False)
         print(f"\n✅ Cleanup complete! Deleted {len(results['deleted_files'])} files.")
