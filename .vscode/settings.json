@@ -1,0 +1,88 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Enabled": true,
+    "editor.formatOnSave": true,
+    "python.formatting.blackPath": "${command:python.interpreterPath} -m black",
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "100"
+    ],
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}"
+    ],
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportAttributeAccessIssue": "none",
+        "reportOptionalMemberAccess": "none",
+        "reportOptionalSubscript": "none"
+    },
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true
+    },
+    "editor.rulers": [
+        100
+    ],
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.suggest.showMethods": true,
+    "editor.suggest.preview": true,
+    "editor.snippetSuggestions": "top",
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    "autoDocstring.docstringFormat": "google",
+    "autoDocstring.generateDocstringOnEnter": true,
+    "python.envFile": "${workspaceFolder}/.env",
+    "cSpell.words": [
+        "colorlog",
+        "dateutil",
+        "getpass",
+        "imdb",
+        "itertools",
+        "jsonschema",
+        "Shawshank",
+        "tearoff",
+        "themoviedb",
+        "TMDB",
+        "urllib",
+        "watchlist",
+        "watchlists"
+    ],
+    // Enable Git and GitLens integration
+    "git.enabled": true,
+    "git.autofetch": true,
+    "git.autorefresh": true,
+    "scm.diffDecorations": "all",
+    "scm.showIncomingChanges": "always",
+    "scm.showOutgoingChanges": "always",
+    "scm.alwaysShowProviders": true,
+    "workbench.view.scm.alwaysShowRepositories": true,
+    // GitLens settings
+    "gitlens.enabled": true,
+    "gitlens.showWelcomeOnInstall": false,
+    "gitlens.currentLine.enabled": true,
+    "gitlens.currentLine.pullRequests.enabled": false,
+    "gitlens.hovers.enabled": true,
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.blame.highlight.enabled": true,
+    "gitlens.blame.ignoreWhitespace": false,
+    "gitlens.codeLens.enabled": true,
+    "gitlens.codeLens.authors.enabled": true,
+    "gitlens.codeLens.recentChange.enabled": true,
+    "gitlens.statusBar.enabled": true,
+    "gitlens.views.repositories.files.layout": "tree",
+    "gitlens.views.fileHistory.enabled": true
+}

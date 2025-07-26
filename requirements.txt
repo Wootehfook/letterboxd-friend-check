@@ -1,0 +1,58 @@
+# Letterboxd Friend Check Application Requirements
+# This file lists all required Python packages for the application
+#
+# Install with: pip install -r requirements.txt
+#
+# Author: Woo T. Fook
+# Note: This application was built with assistance from AI
+# License: GNU General Public License v3
+
+# Core web scraping and HTTP requests
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Image processing for movie posters and GUI images
+Pillow>=10.0.0
+
+# Web automation for login cookie extraction
+selenium>=4.15.0
+
+# Optional: WebDriver management (recommended for easier Selenium setup)
+webdriver-manager>=3.8.0
+
+# Optional: TMDB API integration (if using tmdbsimple instead of direct API calls)
+# tmdbsimple>=2.9.1
+
+# Optional: Enhanced HTTP session management
+urllib3>=1.26.0
+
+# Optional: JSON schema validation for config files
+jsonschema>=4.17.0
+
+# Optional: Better date/time handling
+python-dateutil>=2.8.0
+
+# Optional: Enhanced logging with colors
+colorlog>=6.7.0
+
+# Development and testing dependencies (optional)
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+# flake8>=6.0.0
+# black>=23.0.0
+# pylint>=2.15.0
+
+# Note: The following are included with Python standard library:
+# - sqlite3 (database operations)
+# - tkinter (GUI framework) 
+# - threading (concurrent operations)
+# - json (JSON handling)
+# - os, sys (system operations)
+# - re (regular expressions)
+# - webbrowser (opening URLs)
+# - logging (application logging)
+# - concurrent.futures (thread pool execution)
+# - time, datetime (time operations)
+# - getpass (password input)
+# - signal (signal handling)
+# - itertools (iteration utilities)

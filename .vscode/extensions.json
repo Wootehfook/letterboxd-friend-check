@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "ms-python.black-formatter",
+        "ms-python.flake8",
+        "alexcvzz.vscode-sqlite",
+        "eamodio.gitlens",
+        "streetsidesoftware.code-spell-checker",
+        "njpwerner.autodocstring",
+        "visualstudioexptteam.vscodeintellicode",
+        "ms-toolsai.jupyter"
+    ]
+}

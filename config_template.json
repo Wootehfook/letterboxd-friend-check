@@ -1,0 +1,14 @@
+{
+    "username": "",
+    "remember_user": false,
+    "tmdb_api_key": "",
+    "_comment_tmdb_api_key": "Get your free TMDB API key from https://www.themoviedb.org/settings/api",
+    "_comment_instructions": [
+        "1. Sign up for a free account at https://www.themoviedb.org/",
+        "2. Go to your account settings: https://www.themoviedb.org/settings/api",
+        "3. Request an API key (choose 'Developer' option)",
+        "4. Copy your API key and paste it in the tmdb_api_key field above",
+        "5. Save this file and restart the application"
+    ],
+    "dark_mode": false
+}
