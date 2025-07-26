@@ -324,7 +324,7 @@ def save_movie_data(title: str, data: Dict[str, Any], db_path: Optional[str] = N
         # [2025-07-26 GitHub Copilot] Ultra-secure SQL approach - individual updates (B608 fix)
         # Use separate UPDATE statement for each column to avoid string construction
         movie_id = update_values[-1]  # Last value is always movie_id
-        
+
         for i, col in enumerate(update_columns):
             value = update_values[i]
             if col == "director = ?":
@@ -340,20 +340,23 @@ def save_movie_data(title: str, data: Dict[str, Any], db_path: Optional[str] = N
             elif col == "tmdb_rating = ?":
                 c.execute("UPDATE movies SET tmdb_rating = ? WHERE movie_id = ?", [value, movie_id])
             elif col == "release_date = ?":
-                c.execute("UPDATE movies SET release_date = ? WHERE movie_id = ?",
-                          [value, movie_id])
+                c.execute(
+                    "UPDATE movies SET release_date = ? WHERE movie_id = ?", [value, movie_id]
+                )
             elif col == "runtime = ?":
                 c.execute("UPDATE movies SET runtime = ? WHERE movie_id = ?", [value, movie_id])
             elif col == "poster_path = ?":
                 c.execute("UPDATE movies SET poster_path = ? WHERE movie_id = ?", [value, movie_id])
             elif col == "backdrop_path = ?":
-                c.execute("UPDATE movies SET backdrop_path = ? WHERE movie_id = ?",
-                          [value, movie_id])
+                c.execute(
+                    "UPDATE movies SET backdrop_path = ? WHERE movie_id = ?", [value, movie_id]
+                )
             elif col == "overview = ?":
                 c.execute("UPDATE movies SET overview = ? WHERE movie_id = ?", [value, movie_id])
             elif col == "last_updated = ?":
-                c.execute("UPDATE movies SET last_updated = ? WHERE movie_id = ?",
-                          [value, movie_id])
+                c.execute(
+                    "UPDATE movies SET last_updated = ? WHERE movie_id = ?", [value, movie_id]
+                )
 
     conn.commit()
     conn.close()

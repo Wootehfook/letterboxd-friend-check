@@ -73,7 +73,10 @@ security_report.txt
 security_report_*.txt
 trufflehog-*.json
 *-security-report.*
-bandit-report.json
+bandit-report*.json
+bandit-final*.json
+bandit-focused*.json
+bandit-clean*.json
 safety-report.json
 
 # Security alert files (may contain exposed keys)
