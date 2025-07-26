@@ -203,61 +203,52 @@ jobs:
       - name: Run Bandit (Python security linter)
         run: |
           echo "🔍 Running Bandit security linter..."
-          # Use pyproject.toml for configuration, not .bandit
-          if bandit -r . -f json -o bandit-report.json; then
-            echo "✅ Bandit scan completed - no security issues found"
-          else
-            EXIT_CODE=$?
-            echo " Bandit completed with exit code: $EXIT_CODE"
-            if [ -f "bandit-report.json" ] && [ -s "bandit-report.json" ]; then
-              echo "📄 Bandit report generated - reviewing findings..."
-              
-              # Check for MEDIUM/HIGH severity issues that should fail the build
-              CRITICAL_ISSUES=$(python3 -c "
-              import json, sys
-              try:
-                  with open('bandit-report.json', 'r') as f:
-                      data = json.load(f)
-                  # Exclude virtual environment from results
-                  project_results = [
-                      r for r in data.get('results', []) 
-                      if '.venv' not in r.get('filename', '')
-                  ]
-                  medium_high_issues = [
-                      r for r in project_results 
-                      if r.get('issue_severity') in ['MEDIUM', 'HIGH']
-                  ]
-                  if medium_high_issues:
-                      print(f'Found {len(medium_high_issues)} MEDIUM/HIGH severity issues:')
-                      for issue in medium_high_issues:
-                          print(f'  - {issue[\"filename\"]}:{issue[\"line_number\"]} - {issue[\"issue_text\"]} (Severity: {issue[\"issue_severity\"]})')
-                      sys.exit(1)
-                  else:
-                      low_issues = [
-                          r for r in project_results 
-                          if r.get('issue_severity') == 'LOW'
-                      ]
-                      print(f'Found {len(low_issues)} LOW severity issues (acceptable for this application type)')
-                      print('All MEDIUM/HIGH severity issues resolved ✅')
-                      sys.exit(0)
-              except Exception as e:
-                  print(f'Error parsing Bandit report: {e}')
+          # Always run bandit and let the parser determine the outcome
+          bandit -r . -f json -o bandit-report.json || true
+          
+          echo "📄 Bandit report generated - reviewing findings..."
+          
+          # Check for MEDIUM/HIGH severity issues that should fail the build
+          CRITICAL_ISSUES=$(python3 -c "
+          import json, sys
+          try:
+              with open('bandit-report.json', 'r') as f:
+                  data = json.load(f)
+              # Exclude virtual environment from results
+              project_results = [
+                  r for r in data.get('results', []) 
+                  if '.venv' not in r.get('filename', '')
+              ]
+              medium_high_issues = [
+                  r for r in project_results 
+                  if r.get('issue_severity') in ['MEDIUM', 'HIGH']
+              ]
+              if medium_high_issues:
+                  print(f'Found {len(medium_high_issues)} MEDIUM/HIGH severity issues:')
+                  for issue in medium_high_issues:
+                      print(f'  - {issue[\"filename\"]}:{issue[\"line_number\"]} - {issue[\"issue_text\"]} (Severity: {issue[\"issue_severity\"]})')
                   sys.exit(1)
-              " 2>&1)
-              
-              PARSE_EXIT_CODE=$?
-              echo "$CRITICAL_ISSUES"
-              
-              if [ $PARSE_EXIT_CODE -eq 0 ]; then
-                echo "✅ Bandit scan passed - only LOW severity issues found (acceptable)"
-              else
-                echo "❌ Critical security issues found - failing build for security"
-                exit 1
-              fi
-            else
-              echo "❌ Bandit scan failed without generating report - tool error"
-              exit $EXIT_CODE
-            fi
+              else:
+                  low_issues = [
+                      r for r in project_results 
+                      if r.get('issue_severity') == 'LOW'
+                  ]
+                  print(f'Found {len(low_issues)} LOW severity issues (acceptable for this application type)')
+                  print('All MEDIUM/HIGH severity issues resolved ✅')
+                  sys.exit(0)
+          except Exception as e:
+              print(f'Error parsing Bandit report: {e}')
+              sys.exit(1)
+          " 2>&1)
+          
+          PARSE_EXIT_CODE=$?
+          echo "$CRITICAL_ISSUES"
+          
+          if [ $PARSE_EXIT_CODE -eq 0 ]; then
+            echo "✅ Bandit scan passed - only LOW severity issues found (acceptable)"
+          else
+            echo "❌ Critical security issues found - failing build for security"
+            exit 1
           fi
       
       - name: Upload Security Reports
