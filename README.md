@@ -37,8 +37,8 @@ A Python desktop application that compares your Letterboxd watchlist with friend
 
 1. **Clone this repository**:
    ```bash
-   git clone https://github.com/Wootehfook/crispy-waddle.git
-   cd crispy-waddle
+   git clone https://github.com/YOUR_USERNAME/letterboxd-friend-check.git
+   cd letterboxd-friend-check
    ```
 2. **Install dependencies**:
    ```bash
