@@ -203,11 +203,12 @@ jobs:
       - name: Run Bandit (Python security linter)
         run: |
           echo "🔍 Running Bandit security linter..."
-          if bandit --configfile .bandit -r . -f json -o bandit-report.json; then
+          # Use pyproject.toml for configuration, not .bandit
+          if bandit -r . -f json -o bandit-report.json; then
             echo "✅ Bandit scan completed - no security issues found"
           else
             EXIT_CODE=$?
-            echo "� Bandit completed with exit code: $EXIT_CODE"
+            echo " Bandit completed with exit code: $EXIT_CODE"
             if [ -f "bandit-report.json" ] && [ -s "bandit-report.json" ]; then
               echo "📄 Bandit report generated - reviewing findings..."
               
@@ -217,14 +218,25 @@ jobs:
               try:
                   with open('bandit-report.json', 'r') as f:
                       data = json.load(f)
-                  medium_high_issues = [r for r in data.get('results', []) if r.get('issue_severity') in ['MEDIUM', 'HIGH']]
+                  # Exclude virtual environment from results
+                  project_results = [
+                      r for r in data.get('results', []) 
+                      if '.venv' not in r.get('filename', '')
+                  ]
+                  medium_high_issues = [
+                      r for r in project_results 
+                      if r.get('issue_severity') in ['MEDIUM', 'HIGH']
+                  ]
                   if medium_high_issues:
                       print(f'Found {len(medium_high_issues)} MEDIUM/HIGH severity issues:')
                       for issue in medium_high_issues:
                           print(f'  - {issue[\"filename\"]}:{issue[\"line_number\"]} - {issue[\"issue_text\"]} (Severity: {issue[\"issue_severity\"]})')
                       sys.exit(1)
                   else:
-                      low_issues = [r for r in data.get('results', []) if r.get('issue_severity') == 'LOW']
+                      low_issues = [
+                          r for r in project_results 
+                          if r.get('issue_severity') == 'LOW'
+                      ]
                       print(f'Found {len(low_issues)} LOW severity issues (acceptable for this application type)')
                       print('All MEDIUM/HIGH severity issues resolved ✅')
                       sys.exit(0)
