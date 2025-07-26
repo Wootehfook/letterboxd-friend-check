@@ -20,6 +20,13 @@ class MenuMethods:
     Required attributes/methods that must be provided by the inheriting class:
     - friends_watchlists: dict containing friend watchlist data
     - on_close(): method to handle application closing
+    
+    Optional attributes that may be provided by the inheriting class:
+    - username: str - current user's Letterboxd username
+    - friends: list/dict - user's friends data
+    - user_watchlist: list/dict - user's watchlist data
+    - results_tree: tkinter.Treeview - results display widget
+    - save_config(): method to save application configuration
     """
 
     @property
@@ -93,7 +100,8 @@ class MenuMethods:
     def export_results(self):
         """Export results to file"""
         # Check if we have results to export
-        if not hasattr(self, "results_tree") or not self.results_tree.get_children():
+        results_tree = getattr(self, "results_tree", None)
+        if not results_tree or not results_tree.get_children():
             messagebox.showinfo("Export", "No results to export.")
             return
 
@@ -113,8 +121,8 @@ class MenuMethods:
                 f.write("Movie Title,Year,Rating,Common Friends,Director,Runtime,Genres\n")
 
                 # Write data
-                for item_id in self.results_tree.get_children():
-                    values = self.results_tree.item(item_id, "values")
+                for item_id in results_tree.get_children():
+                    values = results_tree.item(item_id, "values")
                     # Format and escape values properly for CSV
                     formatted_values = []
                     for val in values:
@@ -134,8 +142,9 @@ class MenuMethods:
     def save_all_data(self):
         """Save all application data"""
         try:
-            # Save config
-            self.save_config()
+            # Save config if the method exists
+            if hasattr(self, "save_config"):
+                self.save_config()
 
             # Import database functions locally to avoid circular imports
             from letterboxd_friend_check.data.database import (
@@ -144,11 +153,15 @@ class MenuMethods:
             )
 
             # Save any in-memory data to the database if needed
-            if hasattr(self, "user_watchlist") and self.user_watchlist and self.username:
-                sync_watchlist_to_db(self.username, self.user_watchlist)
+            username = getattr(self, "username", None)
+            user_watchlist = getattr(self, "user_watchlist", None)
+            friends = getattr(self, "friends", None)
 
-            if hasattr(self, "friends") and self.friends and self.username:
-                sync_friends_to_db(self.username, self.friends)
+            if user_watchlist and username:
+                sync_watchlist_to_db(username, user_watchlist)
+
+            if friends and username:
+                sync_friends_to_db(username, friends)
 
             if hasattr(self, "friends_watchlists") and self.friends_watchlists:
                 for friend, watchlist in self.friends_watchlists.items():
