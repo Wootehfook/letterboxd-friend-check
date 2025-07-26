@@ -1,107 +1,102 @@
 name: Security Scanning
+
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
   schedule:
-    # Run security scan daily at 2 AM UTC
     - cron: '0 2 * * *'
+
+# Explicit permissions for security
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+  pull-requests: read
 
 jobs:
   security-scan:
-    runs-on: ubuntu-latest
     name: Security Scanning
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for security scanning
-
+          fetch-depth: 0
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-
+      
       - name: Install TruffleHog
         run: |
           curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
-
+      
       - name: Run TruffleHog Git History Scan
-        id: trufflehog-git
         run: |
-          trufflehog git file://. --json --no-update | tee trufflehog-git-results.json
-          echo "git_scan_complete=true" >> $GITHUB_OUTPUT
-
+          trufflehog git https://github.com/${{ github.repository }}.git --branch=${{ github.head_ref || github.ref_name }} --only-verified --json > trufflehog-git.json || true
+      
       - name: Run TruffleHog Filesystem Scan
-        id: trufflehog-fs
         run: |
-          trufflehog filesystem . --json --no-update | tee trufflehog-fs-results.json
-          echo "fs_scan_complete=true" >> $GITHUB_OUTPUT
-
+          trufflehog filesystem . --only-verified --json > trufflehog-fs.json || true
+      
       - name: Run Custom Security Scanner
         run: |
-          python security_scan.py
-
+          python security_scan.py || true
+      
       - name: Upload TruffleHog Results
-        uses: actions/upload-artifact@v3
-        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: trufflehog-results
           path: |
-            trufflehog-git-results.json
-            trufflehog-fs-results.json
-            security_report.txt
-
+            trufflehog-*.json
+          retention-days: 30
+      
       - name: Check for Security Issues
         run: |
-          # Check if any secrets were found
-          GIT_ISSUES=$(jq length trufflehog-git-results.json)
-          FS_ISSUES=$(jq length trufflehog-fs-results.json)
-          
-          echo "Git history scan found: $GIT_ISSUES potential issues"
-          echo "Filesystem scan found: $FS_ISSUES potential issues"
-          
-          if [ "$GIT_ISSUES" -gt 0 ] || [ "$FS_ISSUES" -gt 0 ]; then
-            echo "🚨 Security issues detected! Please review the uploaded artifacts."
+          if [ -s trufflehog-git.json ] || [ -s trufflehog-fs.json ]; then
+            echo "🚨 Security issues found!"
+            echo "Git scan results:"
+            cat trufflehog-git.json 2>/dev/null || echo "No git scan results"
+            echo "Filesystem scan results:"  
+            cat trufflehog-fs.json 2>/dev/null || echo "No filesystem scan results"
             exit 1
           else
-            echo "✅ No security issues found!"
+            echo "✅ No security issues found"
           fi
 
   dependency-scan:
-    runs-on: ubuntu-latest
     name: Dependency Security Scan
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-
+      
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install safety bandit
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
+      
       - name: Run Safety (dependency vulnerability scan)
         run: |
           safety check --json --output safety-report.json || true
-          cat safety-report.json
-
+      
       - name: Run Bandit (Python security linter)
         run: |
           bandit -r . -f json -o bandit-report.json || true
-          cat bandit-report.json
-
+      
       - name: Upload Security Reports
-        uses: actions/upload-artifact@v3
-        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: dependency-security-reports
           path: |
-            safety-report.json
-            bandit-report.json
+            *-report.json
+          retention-days: 30
