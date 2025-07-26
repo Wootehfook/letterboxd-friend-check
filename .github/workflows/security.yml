@@ -184,7 +184,7 @@ jobs:
       - name: Run Safety (dependency vulnerability scan)
         run: |
           echo "🔍 Running Safety dependency scan..."
-          if safety check --json --output safety-report.json; then
+          if safety check --output json > safety-report.json; then
             echo "✅ Safety scan completed - no vulnerabilities found"
           else
             EXIT_CODE=$?
