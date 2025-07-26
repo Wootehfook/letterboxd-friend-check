@@ -93,7 +93,8 @@ class MenuMethods:
                     for val in values:
                         # Handle quotes in strings for CSV format
                         if isinstance(val, str) and ("," in val or '"' in val):
-                            formatted_values.append(f'"{val.replace('"', '""')}"')
+                            escaped_val = val.replace('"', '""')
+                            formatted_values.append(f'"{escaped_val}"')
                         else:
                             formatted_values.append(str(val))
 
