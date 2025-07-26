@@ -1,24 +1,24 @@
 ---
 # Bandit configuration file for Letterboxd Friend Check
+bandit:
+  # Exclude test files and build directories
+  exclude_dirs:
+    - tests
+    - build
+    - dist
+    - .venv
+    - __pycache__
+    - letterboxd_friend_check
 
-# Exclude test files and build directories
-exclude_dirs:
-  - tests
-  - build
-  - dist
-  - .venv
-  - __pycache__
-  - letterboxd_friend_check
+  # Use default tests (don't specify specific test IDs to avoid version issues)
+  # We've added nosec comments where appropriate for legitimate usage
 
-# Use default tests (don't specify specific test IDs to avoid version issues)
-# We've added nosec comments where appropriate for legitimate usage
+  # Report medium and high severity issues
+  severity:
+    - MEDIUM
+    - HIGH
 
-# Report medium and high severity issues
-severity:
-  - MEDIUM
-  - HIGH
-
-# Report medium and high confidence issues  
-confidence:
-  - MEDIUM
-  - HIGH
+  # Report medium and high confidence issues  
+  confidence:
+    - MEDIUM
+    - HIGH
