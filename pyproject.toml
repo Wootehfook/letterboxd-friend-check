@@ -28,3 +28,6 @@ disable = ["C0111", "C0103", "C0330"]
 [build-system]
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.bandit]
+exclude_dirs = [".venv", "tests", "build", "dist", "distribution", "download", ".git", "__pycache__"]
