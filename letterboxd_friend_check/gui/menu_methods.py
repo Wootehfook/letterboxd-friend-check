@@ -16,7 +16,34 @@ class MenuMethods:
     Note: This class assumes it will be mixed into a class that inherits from tk.Tk or another
     Tkinter widget class that has the necessary methods like config(), wait_window(), etc.
     It is not meant to be instantiated directly.
+    
+    Required attributes/methods that must be provided by the inheriting class:
+    - friends_watchlists: dict containing friend watchlist data
+    - on_close(): method to handle application closing
     """
+
+    @property
+    def friends_watchlists(self):
+        """
+        Get friends watchlists data.
+        Returns empty dict if not defined by the inheriting class.
+        """
+        return getattr(self, '_friends_watchlists', {})
+
+    @friends_watchlists.setter
+    def friends_watchlists(self, value):
+        """Set friends watchlists data."""
+        self._friends_watchlists = value
+
+    def on_close(self):
+        """
+        Handle application closing.
+        This method should be overridden by the inheriting class.
+        """
+        raise NotImplementedError(
+            "on_close() must be implemented in the main application class. "
+            "This method should handle proper cleanup and window destruction."
+        )
 
     def create_menubar(self):
         """Create application menu bar"""
