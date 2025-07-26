@@ -178,7 +178,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install safety bandit
+          pip install safety bandit[toml]
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       
       - name: Run Safety (dependency vulnerability scan)
@@ -203,7 +203,7 @@ jobs:
       - name: Run Bandit (Python security linter)
         run: |
           echo "🔍 Running Bandit security linter..."
-          if bandit -r . -f json -o bandit-report.json; then
+          if bandit --configfile .bandit -r . -f json -o bandit-report.json; then
             echo "✅ Bandit scan completed - no security issues found"
           else
             EXIT_CODE=$?
