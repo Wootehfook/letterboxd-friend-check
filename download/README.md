@@ -1,63 +1,91 @@
-# 📥 Download - Letterboxd Friend Check
+# Letterboxd Friend Check
 
-## 🚀 Quick Start (No Python Required!)
+A Python desktop application that compares your Letterboxd watchlist with friends' watchlists to find common movies.
 
-**Just want to use the app? You're in the right place!**
+## 🚀 Quick Start (No Installation Required!)
 
-### 📦 What's in this folder:
-- `LetterboxdFriendCheck.exe` - **The complete application** (28.4 MB)
-- `INSTALL.md` - **Installation instructions**
-- `config_template.json` - **Configuration reference**
+### 📥 **Download Ready-to-Use Version**
+**Just want to use the app? No Python needed!**
 
-### ⚡ Quick Installation:
+1. **Go to [`download/`](download/)** folder in this repository
+2. **Download** `LetterboxdFriendCheck.exe` (28.4 MB)
+3. **Double-click** to run (Windows will show security warning - click "More info" → "Run anyway")
+4. **Enter your Letterboxd username** and start finding movies! 🎬
 
-1. **Download** `LetterboxdFriendCheck.exe`
-2. **Double-click** to run (Windows will show a security warning - click "More info" → "Run anyway")
-3. **Enter your Letterboxd username** in the Setup tab
-4. **Start finding movies!** 🎬
-
-### 🎯 First Run Setup:
-1. **Setup Tab**: Enter your Letterboxd username
-2. **Optional**: Add TMDB API key for movie posters ([Get free key](https://www.themoviedb.org/settings/api))
-3. **Sync Tab**: Click "Fetch Friends" to load your friends list
-4. **Select friends** you want to compare with
-5. **Click "Sync Watchlists"** to find common movies
-6. **Results Tab**: Browse movies you both want to watch!
-
-### ✅ System Requirements:
-- **Windows 10 or later**
-- **Internet connection** (for Letterboxd access)
-- **Public Letterboxd profile**
-
-### 🆘 Troubleshooting:
-- **Windows Defender warning**: Normal for unsigned apps - click "More info" → "Run anyway"
-- **Antivirus flags it**: Add to whitelist - it's a safe Python application
-- **Won't start**: Ensure internet connection and try running as administrator
-
-### 🎭 Optional TMDB Enhancement:
-For movie posters, ratings, and details:
-1. Sign up free at [TMDB](https://www.themoviedb.org/)
-2. Get API key from [Account Settings](https://www.themoviedb.org/settings/api)
-3. Enter in Setup tab
-
-### 📱 Features:
-- ✅ Compare watchlists with friends
-- ✅ Professional light/dark themes
-- ✅ Movie posters and details (with TMDB)
-- ✅ Direct links to Letterboxd
-- ✅ Large watchlist support (500+ movies)
-- ✅ Cancel long operations
-- ✅ Privacy-focused (local storage only)
-
-### 🔒 Privacy:
-- No login required
-- Only accesses public Letterboxd data
-- All data stored locally on your computer
-- No personal information transmitted
+[**→ Direct Download Link**](download/LetterboxdFriendCheck.exe) | [**→ Installation Guide**](download/INSTALL.md)
 
 ---
 
-## 👨‍💻 For Developers:
-Want to see the source code or contribute? Check the main repository!
+## ✨ Features
 
-**Enjoy discovering movies with your friends! 🍿**
+- 🎬 **Compare Watchlists**: Find movies you and your friends both want to watch
+- 👥 **Friends Management**: Easily select which friends to sync with
+- 🎨 **Modern UI**: Professional interface with light/dark themes
+- 🎭 **TMDB Integration**: Optional movie details, posters, and ratings
+- 💾 **Data Persistence**: Saves your data between sessions
+- ♿ **Accessibility**: WCAG AA compliant themes
+- 🌐 **Cross-Platform**: Works on Windows, macOS, and Linux
+
+## 👨‍💻 Developer Setup (Python Required)
+
+### Prerequisites
+- Python 3.8+ installed
+- Internet connection
+- Public Letterboxd profile
+
+### Installation Steps
+
+1. **Clone this repository**:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/letterboxd-friend-check.git
+   cd letterboxd-friend-check
+   ```
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Run the application**:
+   ```bash
+   python run_letterboxd.py
+   ```
+
+## First Run Setup
+
+1. Enter your Letterboxd username
+2. (Optional) Add your TMDB API key for enhanced movie details
+3. Click "Fetch Friends" to load your friends list
+4. Select friends you want to compare with
+5. Click "Sync Watchlists" to find common movies
+
+## TMDB API Key (Optional)
+
+For movie posters, ratings, and additional details:
+
+1. Sign up at [TMDB](https://www.themoviedb.org/)
+2. Get your free API key from [Account Settings → API](https://www.themoviedb.org/settings/api)
+3. Enter it in the Setup tab
+
+## Requirements
+
+- Python 3.8 or higher
+- Internet connection
+- Public Letterboxd profile
+
+## Privacy & Data
+
+- Only accesses **public** Letterboxd data
+- No login required
+- All data stored **locally** on your computer
+- Respects Letterboxd's rate limits
+
+## License
+
+GNU General Public License v3.0 - see [LICENSE](LICENSE)
+
+## Contributing
+
+Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
+
+---
+
+**Note**: This application was developed with AI assistance and is not affiliated with Letterboxd.
