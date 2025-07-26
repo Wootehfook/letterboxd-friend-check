@@ -150,6 +150,15 @@ class SmartGitAutomation:
             r'"[a-zA-Z][a-zA-Z0-9_]{2,19}"\s*:\s*"[^"]+@[^"]+"',  # Email patterns
         ]
 
+        # Security report file patterns (should never be committed)
+        self.security_report_patterns = [
+            r"security_report.*\.txt",
+            r"trufflehog-.*\.json",
+            r".*-security-report\..*",
+            r"bandit-report\.json",
+            r"safety-report\.json",
+        ]
+
     def run(self) -> bool:
         """Main automation workflow."""
         print("🤖 Smart Git Automation - Letterboxd Friend Check")
@@ -266,6 +275,10 @@ class SmartGitAutomation:
         """Classify a single file for commit eligibility."""
         filepath = Path(filename)
 
+        # Check if it's a security report (highest priority - always forbidden)
+        if self.is_security_report(filename):
+            return "forbidden"
+
         # Check if explicitly forbidden
         if self.matches_pattern_list(filename, self.forbidden_files):
             return "forbidden"
@@ -345,6 +358,16 @@ class SmartGitAutomation:
         except (IOError, UnicodeDecodeError):
             # If we can't read the file, be conservative
             return True
+
+    def is_security_report(self, filename: str) -> bool:
+        """Check if file is a security report that should never be committed."""
+        try:
+            for pattern in self.security_report_patterns:
+                if re.search(pattern, filename, re.IGNORECASE):
+                    return True
+            return False
+        except Exception:
+            return False
 
     def generate_commit_message(self, safe_files: List[str]) -> str:
         """Generate an intelligent commit message based on changed files."""

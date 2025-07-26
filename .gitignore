@@ -25,6 +25,9 @@ venv/
 env/
 ENV/
 .venv/
+.env
+.env.local
+.env.*.local
 
 # VS Code
 .vscode/*
@@ -32,6 +35,8 @@ ENV/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+# Personal VS Code settings
+.vscode/settings.json
 
 # Database
 *.db
@@ -63,6 +68,24 @@ Output.txt
 # Development backups
 backup_dev_state_*/
 
+# Security scan reports (may contain sensitive data)
+security_report.txt
+security_report_*.txt
+trufflehog-*.json
+*-security-report.*
+bandit-report.json
+safety-report.json
+
+# Security alert files (may contain exposed keys)
+SECURITY_ALERT_*.md
+
+# Status and completion documentation (temporary)
+GITLENS_ENABLED.md
+*_COMPLETE.md
+*_CLEANUP_COMPLETE.md
+SENSITIVE_DATA_REMOVAL_COMPLETE.md
+SECURITY_CLEANUP_COMPLETE.md
+
 # PyInstaller
 *.manifest
 *.spec
@@ -86,3 +109,46 @@ distribution/
 
 # Development backups
 backup_dev_state_*/
+
+# IDE files
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Profiling data
+*.prof
+profile_output*
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Rope project settings
+.ropeproject
