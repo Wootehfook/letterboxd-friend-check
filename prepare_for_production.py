@@ -207,7 +207,8 @@ def create_production_readme():
 
     production_readme = """# Letterboxd Friend Check
 
-A Python desktop application that compares your Letterboxd watchlist with friends' watchlists to find common movies.
+A Python desktop application that compares your Letterboxd watchlist with friends' watchlists
+to find common movies.
 
 ## Features
 

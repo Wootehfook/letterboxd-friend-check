@@ -549,7 +549,7 @@ def main():
         epilog="""
 Examples:
   python smart_git_automation.py                # Run with defaults
-  python smart_git_automation.py --dry-run      # Preview actions only  
+  python smart_git_automation.py --dry-run      # Preview actions only
   python smart_git_automation.py --interactive  # Ask for confirmation
   python smart_git_automation.py --dry-run --interactive  # Preview with interaction
         """,

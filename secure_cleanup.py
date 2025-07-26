@@ -111,7 +111,7 @@ class SecureCleanup:
             "skipped_for_review": results["requires_review"],
         }
 
-        print(f"\n📋 Summary:")
+        print("\n📋 Summary:")
         print(f"   🗑️  Safe to remove: {len(results['safe_to_remove'])} files")
         print(f"   ⚠️  Requires review: {len(results['requires_review'])} files")
         print(f"   ✅ Clean files: {len(results['clean_files'])} files")
@@ -139,7 +139,7 @@ class SecureCleanup:
                 print(f"   ❌ {error_msg}")
 
         if results["requires_review"]:
-            print(f"\n⚠️  Files requiring manual review:")
+            print("\n⚠️  Files requiring manual review:")
             for file_path in results["requires_review"]:
                 print(f"   📄 {file_path}")
             print("\n💡 These files contain sensitive data but need manual review before deletion.")

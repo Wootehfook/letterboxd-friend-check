@@ -56,7 +56,7 @@ class MenuMethods:
         """Create application menu bar"""
         # Type checking note: 'self' will be a Tkinter widget when this class is used properly
         menubar = tk.Menu(self)  # type: ignore
-        self.config(menu=menubar)  # type: ignore
+        self.config(menu=menubar)  # type: ignore[attr-defined]  # pylint: disable=no-member
 
         # File menu
         file_menu = tk.Menu(menubar, tearoff=0)
@@ -88,7 +88,7 @@ class MenuMethods:
         from letterboxd_friend_check.gui.setup_dialog import SetupDialog
 
         setup_dialog = SetupDialog(self)
-        self.wait_window(setup_dialog)
+        self.wait_window(setup_dialog)  # pylint: disable=no-member
 
     def show_database_dialog(self):
         """Show database management dialog"""

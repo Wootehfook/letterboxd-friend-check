@@ -23,7 +23,7 @@ multi_line_output = 3
 
 [tool.pylint]
 max-line-length = 100
-disable = ["C0111", "C0103", "C0330", "C0326"]
+disable = ["C0111", "C0103", "C0330"]
 
 [build-system]
 requires = ["setuptools>=42", "wheel"]
