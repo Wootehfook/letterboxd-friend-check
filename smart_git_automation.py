@@ -467,7 +467,7 @@ class SmartGitAutomation:
 
         while True:
             try:
-                # nosec B601 # Safe menu input with validation
+                # Safe menu input with validation
                 response = input("\nProceed? (y/n/details): ").strip().lower()
 
                 if response in ["y", "yes"]:

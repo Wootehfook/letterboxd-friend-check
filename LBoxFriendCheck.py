@@ -81,7 +81,7 @@ def validate_username_input(prompt: str, max_length: int = 50) -> str:
     """
     while True:
         try:
-            user_input = input(prompt).strip()  # nosec B601 # Safe CLI input validation
+            user_input = input(prompt).strip()  # Safe CLI input validation
 
             # Check for exit command
             if user_input.lower() == "exit":
@@ -125,7 +125,7 @@ def validate_menu_choice(prompt: str, valid_choices: list) -> str:
     """
     while True:
         try:
-            choice = input(prompt).strip()  # nosec B601 # Safe CLI menu validation
+            choice = input(prompt).strip()  # Safe CLI menu validation
 
             if choice in valid_choices:
                 return choice
@@ -156,7 +156,7 @@ def validate_confirmation_input(prompt: str, expected_values: list = None) -> st
 
     while True:
         try:
-            response = input(prompt).strip().lower()  # nosec B601 # Safe confirmation input
+            response = input(prompt).strip().lower()  # Safe confirmation input
 
             if response in expected_values:
                 return response

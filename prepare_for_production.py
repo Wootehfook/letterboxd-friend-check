@@ -423,7 +423,7 @@ def main():
     # Secure input validation for confirmation
     while True:
         try:
-            # nosec B601 # Safe confirmation input with validation
+            # Safe confirmation input with validation
             response = input("Continue? (y/N): ").strip().lower()
             if response in ["y", "yes", "n", "no", ""]:
                 break

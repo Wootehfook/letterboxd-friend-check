@@ -195,7 +195,7 @@ def main():
         # Secure input validation for destructive operation
         while True:
             try:
-                # nosec B601 # Safe confirmation for file deletion with strict validation
+                # Safe confirmation for file deletion with strict validation
                 confirm = input("Are you sure? Type 'yes' to continue: ")
                 if confirm.lower() == "yes":
                     break

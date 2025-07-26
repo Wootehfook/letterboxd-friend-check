@@ -182,6 +182,6 @@ print("   - Get API key from https://www.themoviedb.org/settings/api")
 print('   - Update "tmdb_api_key": "your_key_here" in config.json')
 print("-" * 60)
 try:
-    input("\nPress Enter to exit...")  # nosec B601 # Safe exit prompt
+    input("\nPress Enter to exit...")  # Safe exit prompt
 except (EOFError, KeyboardInterrupt):
     pass  # Allow graceful exit
