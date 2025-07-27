@@ -324,7 +324,7 @@ def save_movie_data(title: str, data: Dict[str, Any], db_path: Optional[str] = N
         # Refactor to use a single parameterized UPDATE statement
         # Prepare the SQL query using placeholders for column updates
         # nosec B608: column count from controlled update_columns, values properly parameterized
-        query = (f"UPDATE movies SET {', '.join(['?'] * len(update_columns))} "
+        query = (f"UPDATE movies SET {', '.join(update_columns)} "
                  f"WHERE movie_id = ?")  # nosec B608
 
         # Execute the query with parameterized values
