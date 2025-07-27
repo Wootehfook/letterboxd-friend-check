@@ -325,8 +325,8 @@ def save_movie_data(title: str, data: Dict[str, Any], db_path: Optional[str] = N
         # Construct the SET clause dynamically
         set_clause = ", ".join(update_columns)
 
-        # Prepare the SQL query
-        query = f"UPDATE movies SET {set_clause} WHERE movie_id = ?"
+        # Prepare the SQL query - nosec B608: column names are from controlled column_map
+        query = f"UPDATE movies SET {set_clause} WHERE movie_id = ?"  # nosec B608
 
         # Execute the query with parameterized values
         c.execute(query, update_values)

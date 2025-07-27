@@ -88,12 +88,7 @@ class PreCommitChecker:
         """Run git command and return output and return code."""
         try:
             result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                check=False,
-                encoding='utf-8',
-                errors='replace'
+                cmd, capture_output=True, text=True, check=False, encoding="utf-8", errors="replace"
             )
             return result.stdout.strip() if result.stdout else "", result.returncode
         except Exception as e:

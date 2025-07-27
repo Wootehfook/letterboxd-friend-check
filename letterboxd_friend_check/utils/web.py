@@ -144,7 +144,8 @@ def get_watchlist(username: str, limit: Optional[int] = None) -> Set[str]:
             logger.info(f"Fetched {page_movie_count} movies from page {page} for {username}.")
 
             page += 1
-            sleep_time = random.uniform(1, 1.5)
+            # nosec B311: random used for rate limiting, not cryptography
+            sleep_time = random.uniform(1, 1.5)  # nosec B311
             logger.debug(f"Sleeping for {sleep_time:.2f} seconds to avoid rate limiting.")
             time.sleep(sleep_time)
 
