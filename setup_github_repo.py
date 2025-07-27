@@ -17,7 +17,6 @@ What it does:
 import os
 import json
 import subprocess
-from datetime import datetime
 
 
 def check_git_installed():
@@ -62,7 +61,9 @@ def create_release_notes():
 
     release_notes = """# Letterboxd Friend Check v1.0.0 🎬
 
-Welcome to the first official release of Letterboxd Friend Check! This desktop application helps you discover movies you and your friends both want to watch by comparing your Letterboxd watchlists.
+Welcome to the first official release of Letterboxd Friend Check! This desktop application
+helps you discover movies you and your friends both want to watch by comparing your
+Letterboxd watchlists.
 
 ## ✨ Features
 
@@ -164,9 +165,9 @@ def create_github_instructions():
     """Create step-by-step GitHub setup instructions."""
     print("\n📋 Creating GitHub setup instructions...")
 
-    instructions = f"""# 🚀 GitHub Repository Setup Instructions
+    instructions = """# 🚀 GitHub Repository Setup Instructions
 
-Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+Generated automatically for repository setup.
 
 ## Step 1: Create GitHub Repository
 

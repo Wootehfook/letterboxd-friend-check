@@ -16,6 +16,9 @@ TMDB_BASE_URL = "https://api.themoviedb.org/3"
 SEARCH_MOVIE_URL = f"{TMDB_BASE_URL}/search/movie"
 MOVIE_DETAILS_URL = f"{TMDB_BASE_URL}/movie"
 
+# Request timeout constant (in seconds)
+REQUEST_TIMEOUT = 10
+
 
 # Get API key from environment or config
 def get_api_key():
@@ -82,7 +85,7 @@ def search_movie(title, year=None):
         params["year"] = year
 
     try:
-        response = requests.get(SEARCH_MOVIE_URL, params=params)
+        response = requests.get(SEARCH_MOVIE_URL, params=params, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
 
         results = response.json().get("results", [])
@@ -124,7 +127,7 @@ def get_movie_details(title, year=None):
         url = f"{MOVIE_DETAILS_URL}/{movie_id}"
         params = {"api_key": api_key, "language": "en-US", "append_to_response": "credits,keywords"}
 
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
 
         return response.json()

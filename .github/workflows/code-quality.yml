@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ main ]
 
+# Explicit permissions for security
+permissions:
+  contents: read
+  pull-requests: read
+  checks: write
+
 jobs:
   code-quality:
     name: Code Quality Checks
@@ -22,21 +28,75 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install black flake8 pylint mypy
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pylint black flake8
           
       - name: Check code formatting with Black
         run: |
-          echo "Checking code formatting..."
-          black --check --diff . || echo "Code formatting issues found (non-blocking)"
+          echo "🔍 Checking code formatting with Black..."
+          if find . -name "*.py" -type f | grep -q .; then
+            if black --check --diff .; then
+              echo "✅ Code formatting is correct"
+            else
+              echo "⚠️ Code formatting issues found!"
+              echo "Run 'black .' to fix formatting issues"
+              echo "Showing formatting diff above ⬆️"
+              echo "NOTE: This is non-blocking to allow security fixes to merge"
+            fi
+          else
+            echo "No Python files found to format"
+          fi
           
-      - name: Run Flake8 linting
+      - name: Lint with flake8
         run: |
-          echo "Running Flake8 linting..."
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics || echo "Linting issues found (non-blocking)"
+          echo "🔍 Running flake8 linting..."
+          echo "Checking for critical errors (syntax, undefined names, etc.)..."
+          if flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics; then
+            echo "✅ No critical flake8 errors found"
+          else
+            echo "⚠️ Critical flake8 errors found - these should be fixed"
+            echo "NOTE: This is non-blocking to allow security fixes to merge"
+          fi
           
-      - name: Validate project structure
+          echo "Running full complexity and style checks..."
+          if flake8 . --count --max-complexity=10 --max-line-length=127 --statistics; then
+            echo "✅ No flake8 style issues found"
+          else
+            echo "⚠️ Flake8 style issues found (non-blocking)"
+            echo "Consider fixing these issues for better code quality"
+          fi
+          
+      - name: Lint with pylint
         run: |
-          echo "✅ Validating project structure..."
-          ls -la
+          echo "🔍 Running Pylint on Python files..."
+          if find . -name "*.py" -type f | grep -q .; then
+            echo "Found Python files to lint:"
+            find . -name "*.py" -type f | head -10
+            find . -name "*.py" -type f -exec pylint --errors-only {} +
+          else
+            echo "No Python files found to lint"
+          fi
+          
+      - name: Type checking with mypy
+        run: |
+          echo "🔍 Running MyPy type checking..."
+          if find . -name "*.py" -type f | grep -q .; then
+            echo "Running type checking on Python files..."
+            if mypy . --ignore-missing-imports --show-error-codes; then
+              echo "✅ MyPy type checking passed"
+            else
+              echo "⚠️ MyPy found type issues (non-blocking for now)"
+              echo "Consider fixing type issues for better code quality"
+            fi
+          else
+            echo "No Python files found for type checking"
+          fi
+          
+      - name: Check project structure
+        run: |
+          echo "✅ Checking project structure..."
+          if [ -f "requirements.txt" ]; then echo "✅ requirements.txt found"; fi
+          if [ -f "README.md" ]; then echo "✅ README.md found"; fi
+          if [ -f ".gitignore" ]; then echo "✅ .gitignore found"; fi
+          if [ -d ".github/workflows" ]; then echo "✅ GitHub workflows found"; fi
           echo "✅ Project structure validation completed"

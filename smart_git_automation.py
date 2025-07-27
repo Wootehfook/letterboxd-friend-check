@@ -466,16 +466,21 @@ class SmartGitAutomation:
             print("⚠️  Note: Some files will be excluded for safety.")
 
         while True:
-            response = input("\nProceed? (y/n/details): ").strip().lower()
+            try:
+                # Safe menu input with validation
+                response = input("\nProceed? (y/n/details): ").strip().lower()
 
-            if response in ["y", "yes"]:
-                return True
-            elif response in ["n", "no"]:
+                if response in ["y", "yes"]:
+                    return True
+                elif response in ["n", "no"]:
+                    return False
+                elif response in ["d", "details"]:
+                    self.show_detailed_review(review_result)
+                else:
+                    print("❌ Please enter 'y' for yes, 'n' for no, or 'd' for details.")
+            except (EOFError, KeyboardInterrupt):
+                print("\n❌ Operation cancelled by user")
                 return False
-            elif response in ["d", "details"]:
-                self.show_detailed_review(review_result)
-            else:
-                print("Please enter 'y' for yes, 'n' for no, or 'd' for details.")
 
     def show_detailed_review(self, review_result: Dict):
         """Show detailed file-by-file review."""
@@ -544,7 +549,7 @@ def main():
         epilog="""
 Examples:
   python smart_git_automation.py                # Run with defaults
-  python smart_git_automation.py --dry-run      # Preview actions only  
+  python smart_git_automation.py --dry-run      # Preview actions only
   python smart_git_automation.py --interactive  # Ask for confirmation
   python smart_git_automation.py --dry-run --interactive  # Preview with interaction
         """,

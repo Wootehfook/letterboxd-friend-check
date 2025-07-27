@@ -6,6 +6,7 @@ Contains menu creation and related functions.
 import tkinter as tk
 from tkinter import messagebox, filedialog
 import webbrowser
+from abc import abstractmethod
 
 
 class MenuMethods:
@@ -16,13 +17,45 @@ class MenuMethods:
     Note: This class assumes it will be mixed into a class that inherits from tk.Tk or another
     Tkinter widget class that has the necessary methods like config(), wait_window(), etc.
     It is not meant to be instantiated directly.
+
+    Required attributes/methods that must be provided by the inheriting class:
+    - friends_watchlists: dict containing friend watchlist data
+    - on_close(): method to handle application closing
+
+    Optional attributes that may be provided by the inheriting class:
+    - username: str - current user's Letterboxd username
+    - friends: list/dict - user's friends data
+    - user_watchlist: list/dict - user's watchlist data
+    - results_tree: tkinter.Treeview - results display widget
+    - save_config(): method to save application configuration
     """
+
+    @property
+    def friends_watchlists(self):
+        """
+        Get friends watchlists data.
+        Returns empty dict if not defined by the inheriting class.
+        """
+        return getattr(self, "_friends_watchlists", {})
+
+    @friends_watchlists.setter
+    def friends_watchlists(self, value):
+        """Set friends watchlists data."""
+        self._friends_watchlists = value
+
+    @abstractmethod
+    def on_close(self):
+        """
+        Handle application closing.
+        This method must be implemented by the inheriting class.
+        """
+        pass
 
     def create_menubar(self):
         """Create application menu bar"""
         # Type checking note: 'self' will be a Tkinter widget when this class is used properly
         menubar = tk.Menu(self)  # type: ignore
-        self.config(menu=menubar)  # type: ignore
+        self.config(menu=menubar)  # type: ignore[attr-defined]  # pylint: disable=no-member
 
         # File menu
         file_menu = tk.Menu(menubar, tearoff=0)
@@ -54,7 +87,7 @@ class MenuMethods:
         from letterboxd_friend_check.gui.setup_dialog import SetupDialog
 
         setup_dialog = SetupDialog(self)
-        self.wait_window(setup_dialog)
+        self.wait_window(setup_dialog)  # pylint: disable=no-member
 
     def show_database_dialog(self):
         """Show database management dialog"""
@@ -66,7 +99,8 @@ class MenuMethods:
     def export_results(self):
         """Export results to file"""
         # Check if we have results to export
-        if not hasattr(self, "results_tree") or not self.results_tree.get_children():
+        results_tree = getattr(self, "results_tree", None)
+        if not results_tree or not results_tree.get_children():
             messagebox.showinfo("Export", "No results to export.")
             return
 
@@ -86,14 +120,15 @@ class MenuMethods:
                 f.write("Movie Title,Year,Rating,Common Friends,Director,Runtime,Genres\n")
 
                 # Write data
-                for item_id in self.results_tree.get_children():
-                    values = self.results_tree.item(item_id, "values")
+                for item_id in results_tree.get_children():
+                    values = results_tree.item(item_id, "values")
                     # Format and escape values properly for CSV
                     formatted_values = []
                     for val in values:
                         # Handle quotes in strings for CSV format
                         if isinstance(val, str) and ("," in val or '"' in val):
-                            formatted_values.append(f'"{val.replace('"', '""')}"')
+                            escaped_val = val.replace('"', '""')
+                            formatted_values.append(f'"{escaped_val}"')
                         else:
                             formatted_values.append(str(val))
 
@@ -106,8 +141,9 @@ class MenuMethods:
     def save_all_data(self):
         """Save all application data"""
         try:
-            # Save config
-            self.save_config()
+            # Save config if the method exists
+            if hasattr(self, "save_config"):
+                self.save_config()
 
             # Import database functions locally to avoid circular imports
             from letterboxd_friend_check.data.database import (
@@ -116,11 +152,15 @@ class MenuMethods:
             )
 
             # Save any in-memory data to the database if needed
-            if hasattr(self, "user_watchlist") and self.user_watchlist and self.username:
-                sync_watchlist_to_db(self.username, self.user_watchlist)
+            username = getattr(self, "username", None)
+            user_watchlist = getattr(self, "user_watchlist", None)
+            friends = getattr(self, "friends", None)
 
-            if hasattr(self, "friends") and self.friends and self.username:
-                sync_friends_to_db(self.username, self.friends)
+            if user_watchlist and username:
+                sync_watchlist_to_db(username, user_watchlist)
+
+            if friends and username:
+                sync_friends_to_db(username, friends)
 
             if hasattr(self, "friends_watchlists") and self.friends_watchlists:
                 for friend, watchlist in self.friends_watchlists.items():

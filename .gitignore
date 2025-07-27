@@ -73,7 +73,10 @@ security_report.txt
 security_report_*.txt
 trufflehog-*.json
 *-security-report.*
-bandit-report.json
+bandit-report*.json
+bandit-final*.json
+bandit-focused*.json
+bandit-clean*.json
 safety-report.json
 
 # Security alert files (may contain exposed keys)
@@ -83,8 +86,14 @@ SECURITY_ALERT_*.md
 GITLENS_ENABLED.md
 *_COMPLETE.md
 *_CLEANUP_COMPLETE.md
+*_SUCCESS.md
+*_READY.md
+*_CHECKLIST.md
 SENSITIVE_DATA_REMOVAL_COMPLETE.md
 SECURITY_CLEANUP_COMPLETE.md
+DEPLOYMENT_*.md
+PRIVATE_REPO_*.md
+DOWNLOAD_FOLDER_*.md
 
 # PyInstaller
 *.manifest

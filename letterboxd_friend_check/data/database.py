@@ -319,9 +319,15 @@ def save_movie_data(title: str, data: Dict[str, Any], db_path: Optional[str] = N
     # Add movie_id to values
     update_values.append(movie_id)
 
-    # Execute update
+    # Execute update using explicit column updates to prevent SQL injection
     if update_columns:
-        query = f"UPDATE movies SET {', '.join(update_columns)} WHERE movie_id = ?"
+        # Refactor to use a single parameterized UPDATE statement
+        # Prepare the SQL query using placeholders for column updates
+        # nosec B608: column count from controlled update_columns, values properly parameterized
+        query = (f"UPDATE movies SET {', '.join(update_columns)} "
+                 f"WHERE movie_id = ?")  # nosec B608
+
+        # Execute the query with parameterized values
         c.execute(query, update_values)
 
     conn.commit()

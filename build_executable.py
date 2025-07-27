@@ -57,7 +57,6 @@ def clean_previous_builds():
     print("\n🧹 Cleaning previous builds...")
 
     dirs_to_clean = ["build", "dist", "__pycache__"]
-    files_to_clean = ["*.spec"]
 
     for dir_name in dirs_to_clean:
         if os.path.exists(dir_name):
@@ -257,10 +256,10 @@ For issues, please check the README.md file or visit the project repository.
     exe_size = os.path.getsize(f"{dist_dir}/LetterboxdFriendCheck.exe")
     exe_size_mb = exe_size / (1024 * 1024)
 
-    print(f"\n📊 Distribution Summary:")
+    print("\n📊 Distribution Summary:")
     print(f"   • Executable size: {exe_size_mb:.1f} MB")
     print(f"   • Distribution directory: {dist_dir}/")
-    print(f"   • Ready for distribution!")
+    print("   • Ready for distribution!")
 
     return True
 

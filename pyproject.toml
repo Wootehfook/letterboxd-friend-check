@@ -23,8 +23,12 @@ multi_line_output = 3
 
 [tool.pylint]
 max-line-length = 100
-disable = ["C0111", "C0103", "C0330", "C0326"]
+disable = ["C0111", "C0103"]
 
 [build-system]
 requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.bandit]
+exclude_dirs = [".venv", "tests", "build", "dist", "distribution", "download", ".git", "__pycache__", "site-packages"]
+skips = ["B101"]  # Skip assert warnings which are common in development code

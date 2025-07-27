@@ -48,6 +48,9 @@ import re
 import threading
 import queue
 
+# Username validation regex - alphanumeric, underscore, hyphen
+USERNAME_REGEX = re.compile(r"^[a-zA-Z0-9_-]+$")
+
 # Add the current directory to the path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
@@ -65,6 +68,110 @@ except ImportError:
 
     def bulk_enrich_movies(*args, **kwargs):
         return args[0] if args else []
+
+
+# --- Secure Input Validation Functions ---
+def validate_username_input(prompt: str, max_length: int = 50) -> str:
+    """
+    Securely get username input with validation.
+
+    Args:
+        prompt: The prompt to display to the user
+        max_length: Maximum allowed length for the input
+
+    Returns:
+        Validated username string
+    """
+    while True:
+        try:
+            user_input = input(prompt).strip()
+
+            # Check for exit command
+            if user_input.lower() == "exit":
+                return user_input
+
+            # Validate length
+            if len(user_input) > max_length:
+                print(f"❌ Username too long (max {max_length} characters)")
+                continue
+
+            # Validate username format (alphanumeric, underscore, hyphen)
+            if not USERNAME_REGEX.match(user_input):
+                print("❌ Username can only contain letters, numbers, underscores, and hyphens")
+                continue
+
+            # Check minimum length
+            if len(user_input) < 1:
+                print("❌ Username cannot be empty")
+                continue
+
+            return user_input
+
+        except (EOFError, KeyboardInterrupt):
+            print("\n❌ Input cancelled by user")
+            return "exit"
+        except Exception as e:
+            print(f"❌ Input error: {e}")
+            continue
+
+
+def validate_menu_choice(prompt: str, valid_choices: list) -> str:
+    """
+    Securely get menu choice input with validation.
+
+    Args:
+        prompt: The prompt to display to the user
+        valid_choices: List of valid choice strings
+
+    Returns:
+        Validated choice string
+    """
+    while True:
+        try:
+            choice = input(prompt).strip()  # Safe CLI menu validation
+
+            if choice in valid_choices:
+                return choice
+
+            print(f"❌ Invalid choice. Please select one of: {', '.join(valid_choices)}")
+
+        except (EOFError, KeyboardInterrupt):
+            print("\n❌ Input cancelled by user")
+            return valid_choices[-1] if valid_choices else ""
+        except Exception as e:
+            print(f"❌ Input error: {e}")
+            continue
+
+
+def validate_confirmation_input(prompt: str, expected_values: list = None) -> str:
+    """
+    Securely get confirmation input with validation.
+
+    Args:
+        prompt: The prompt to display to the user
+        expected_values: List of valid confirmation values (default: ['y', 'yes', 'n', 'no'])
+
+    Returns:
+        Validated confirmation string (lowercase)
+    """
+    if expected_values is None:
+        expected_values = ["y", "yes", "n", "no"]
+
+    while True:
+        try:
+            response = input(prompt).strip().lower()  # Safe confirmation input
+
+            if response in expected_values:
+                return response
+
+            print(f"❌ Please respond with one of: {', '.join(expected_values)}")
+
+        except (EOFError, KeyboardInterrupt):
+            print("\n❌ Input cancelled by user")
+            return "n"  # Default to 'no' for safety
+        except Exception as e:
+            print(f"❌ Input error: {e}")
+            continue
 
 
 # --- Constants and Global Configuration ---
@@ -2448,7 +2555,7 @@ def cli_main():
     clear_output_file()
     init_db()
     while True:
-        username = input("Enter your Letterboxd username (or 'exit' to quit): ")
+        username = validate_username_input("Enter your Letterboxd username (or 'exit' to quit): ")
         if username.lower() == "exit":
             break
         if not username:
@@ -2466,7 +2573,7 @@ def cli_main():
         print("2. Fetch my friends' watchlists")
         print("3. Compare watchlists")
         print("4. Exit")
-        choice = input("Enter your choice: ")
+        choice = validate_menu_choice("Enter your choice: ", ["1", "2", "3", "4"])
         if choice == "1":
             user_watchlist = get_watchlist(username)
             print(f"\nFound {len(user_watchlist)} movies in your watchlist.")

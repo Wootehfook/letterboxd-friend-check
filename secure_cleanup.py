@@ -111,7 +111,7 @@ class SecureCleanup:
             "skipped_for_review": results["requires_review"],
         }
 
-        print(f"\n📋 Summary:")
+        print("\n📋 Summary:")
         print(f"   🗑️  Safe to remove: {len(results['safe_to_remove'])} files")
         print(f"   ⚠️  Requires review: {len(results['requires_review'])} files")
         print(f"   ✅ Clean files: {len(results['clean_files'])} files")
@@ -139,7 +139,7 @@ class SecureCleanup:
                 print(f"   ❌ {error_msg}")
 
         if results["requires_review"]:
-            print(f"\n⚠️  Files requiring manual review:")
+            print("\n⚠️  Files requiring manual review:")
             for file_path in results["requires_review"]:
                 print(f"   📄 {file_path}")
             print("\n💡 These files contain sensitive data but need manual review before deletion.")
@@ -191,10 +191,22 @@ def main():
 
     if args.cleanup:
         print("🚨 LIVE CLEANUP MODE - Files will be permanently deleted!")
-        confirm = input("Are you sure? Type 'yes' to continue: ")
-        if confirm.lower() != "yes":
-            print("❌ Cleanup cancelled.")
-            return
+
+        # Secure input validation for destructive operation
+        while True:
+            try:
+                # Safe confirmation for file deletion with strict validation
+                confirm = input("Are you sure? Type 'yes' to continue: ")
+                if confirm.lower() == "yes":
+                    break
+                elif confirm.lower() in ["no", "n", ""]:
+                    print("❌ Cleanup cancelled.")
+                    return
+                else:
+                    print("❌ You must type exactly 'yes' to proceed with deletion")
+            except (EOFError, KeyboardInterrupt):
+                print("\n❌ Cleanup cancelled by user")
+                return
 
         results = cleanup.cleanup_safe_files(dry_run=False)
         print(f"\n✅ Cleanup complete! Deleted {len(results['deleted_files'])} files.")

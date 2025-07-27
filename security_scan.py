@@ -168,9 +168,8 @@ class SecurityScanner:
             scanned_files += 1
 
             if findings:
-                print(
-                    f"   ⚠️  Found {len(findings)} potential issues in {file_path.relative_to(self.repo_path)}"
-                )
+                relative_path = file_path.relative_to(self.repo_path)
+                print(f"   ⚠️  Found {len(findings)} potential issues in {relative_path}")
 
         return {
             "scanned_files": scanned_files,
