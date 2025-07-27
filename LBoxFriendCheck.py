@@ -81,7 +81,7 @@ def validate_username_input(prompt: str, max_length: int = 50) -> str:
     """
     while True:
         try:
-            user_input = input(prompt).strip()  # Retrieve and strip user input; validation is applied immediately afterward
+            user_input = input(prompt).strip()
 
             # Check for exit command
             if user_input.lower() == "exit":
