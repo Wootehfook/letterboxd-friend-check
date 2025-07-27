@@ -87,8 +87,15 @@ class PreCommitChecker:
     def run_git_command(self, cmd: List[str]) -> Tuple[str, int]:
         """Run git command and return output and return code."""
         try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=False)
-            return result.stdout.strip(), result.returncode
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=False,
+                encoding='utf-8',
+                errors='replace'
+            )
+            return result.stdout.strip() if result.stdout else "", result.returncode
         except Exception as e:
             self.log(f"Git command failed: {e}", "ERROR")
             return "", 1
