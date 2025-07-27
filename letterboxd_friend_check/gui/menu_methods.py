@@ -42,15 +42,12 @@ class MenuMethods:
         """Set friends watchlists data."""
         self._friends_watchlists = value
 
+    @abstractmethod
     def on_close(self):
         """
         Handle application closing.
-        This method should be overridden by the inheriting class.
+        This method must be implemented by the inheriting class.
         """
-        raise NotImplementedError(
-            "on_close() must be implemented in the main application class. "
-            "This method should handle proper cleanup and window destruction."
-        )
 
     def create_menubar(self):
         """Create application menu bar"""
