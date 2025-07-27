@@ -203,8 +203,9 @@ jobs:
       - name: Run Bandit (Python security linter)
         run: |
           echo "🔍 Running Bandit security linter..."
-          # Always run bandit and let the parser determine the outcome
-          bandit -r . -f json -o bandit-report.json || true
+          # Run bandit only on project Python files, not the entire directory
+          # This avoids scanning .venv and other non-project directories
+          bandit -r *.py letterboxd_friend_check/ -f json -o bandit-report.json || true
           
           echo "📄 Bandit report generated - reviewing findings..."
           
@@ -214,10 +215,10 @@ jobs:
           try:
               with open('bandit-report.json', 'r') as f:
                   data = json.load(f)
-              # Exclude virtual environment from results
+              # All results should be project files now, but double-check
               project_results = [
                   r for r in data.get('results', []) 
-                  if '.venv' not in r.get('filename', '')
+                  if '.venv' not in r.get('filename', '') and 'site-packages' not in r.get('filename', '')
               ]
               medium_high_issues = [
                   r for r in project_results 

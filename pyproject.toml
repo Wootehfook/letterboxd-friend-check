@@ -30,4 +30,5 @@ requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.bandit]
-exclude_dirs = [".venv", "tests", "build", "dist", "distribution", "download", ".git", "__pycache__"]
+exclude_dirs = [".venv", "tests", "build", "dist", "distribution", "download", ".git", "__pycache__", "site-packages"]
+skips = ["B101"]  # Skip assert warnings which are common in development code
