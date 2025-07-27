@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   security-scan:
-    name: Security Scanning
+    name: security-scan # Match the required check name
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -164,7 +164,7 @@ jobs:
           fi
 
   dependency-scan:
-    name: Dependency Security Scan
+    name: dependency-scan # Match the required check name
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
