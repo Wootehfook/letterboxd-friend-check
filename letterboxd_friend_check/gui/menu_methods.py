@@ -6,6 +6,7 @@ Contains menu creation and related functions.
 import tkinter as tk
 from tkinter import messagebox, filedialog
 import webbrowser
+from abc import abstractmethod
 
 
 class MenuMethods:

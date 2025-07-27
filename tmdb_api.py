@@ -16,6 +16,9 @@ TMDB_BASE_URL = "https://api.themoviedb.org/3"
 SEARCH_MOVIE_URL = f"{TMDB_BASE_URL}/search/movie"
 MOVIE_DETAILS_URL = f"{TMDB_BASE_URL}/movie"
 
+# Request timeout constant (in seconds)
+REQUEST_TIMEOUT = 10
+
 
 # Get API key from environment or config
 def get_api_key():
