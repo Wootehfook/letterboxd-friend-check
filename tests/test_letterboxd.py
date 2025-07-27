@@ -85,7 +85,7 @@ class TestLetterboxdApp(unittest.TestCase):
             self.assertIn("id", movie_details)
         else:
             # If API is not available, skip test
-            pytest.skip("TMDB API not available or rate limited")
+            self.skipTest("TMDB API not available or rate limited")
 
 
 # Pytest-style test functions for better pytest integration
