@@ -48,6 +48,9 @@ import re
 import threading
 import queue
 
+# Username validation regex - alphanumeric, underscore, hyphen
+USERNAME_REGEX = re.compile(r"^[a-zA-Z0-9_-]+$")
+
 # Add the current directory to the path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
