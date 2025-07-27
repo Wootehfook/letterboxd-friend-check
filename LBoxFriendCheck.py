@@ -93,7 +93,7 @@ def validate_username_input(prompt: str, max_length: int = 50) -> str:
                 continue
 
             # Validate username format (alphanumeric, underscore, hyphen)
-            if not re.match(r"^[a-zA-Z0-9_-]+$", user_input):
+            if not USERNAME_REGEX.match(user_input):
                 print("❌ Username can only contain letters, numbers, underscores, and hyphens")
                 continue
 
