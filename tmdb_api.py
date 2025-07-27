@@ -85,8 +85,9 @@ def search_movie(title, year=None):
         params["year"] = year
 
     try:
-        response = requests.get(SEARCH_MOVIE_URL, params=params, timeout=REQUEST_TIMEOUT)
-        response.raise_for_status()
+        response = make_request(SEARCH_MOVIE_URL, params=params)
+        if not response:
+            return None
 
         results = response.json().get("results", [])
         if results:
