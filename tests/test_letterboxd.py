@@ -24,7 +24,7 @@ class TestLetterboxdApp(unittest.TestCase):
             from LBoxFriendCheck import init_db
         except ImportError:
             pytest.skip("LBoxFriendCheck module not available")
-            
+
         import os
 
         # Use a test database
@@ -93,7 +93,8 @@ def test_basic_imports():
     """Test that basic imports work."""
     try:
         import LBoxFriendCheck
-        assert hasattr(LBoxFriendCheck, 'init_db')
+
+        assert hasattr(LBoxFriendCheck, "init_db")
     except ImportError:
         pytest.skip("LBoxFriendCheck module not available")
 
@@ -102,7 +103,8 @@ def test_tmdb_import():
     """Test that TMDB API import works."""
     try:
         import tmdb_api
-        assert hasattr(tmdb_api, 'get_movie_details')
+
+        assert hasattr(tmdb_api, "get_movie_details")
     except ImportError:
         pytest.skip("tmdb_api module not available")
 

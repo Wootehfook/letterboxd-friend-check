@@ -8,10 +8,10 @@
 #   .\git-safe.ps1 push
 
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory = $true)]
     [string]$Command,
     
-    [Parameter(ValueFromRemainingArguments=$true)]
+    [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$Arguments
 )
 
