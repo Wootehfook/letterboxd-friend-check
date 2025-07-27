@@ -321,32 +321,15 @@ def save_movie_data(title: str, data: Dict[str, Any], db_path: Optional[str] = N
 
     # Execute update using explicit column updates to prevent SQL injection
     if update_columns:
-        # [2025-07-26 GitHub Copilot] Ultra-secure SQL approach - individual updates (B608 fix)
-        # Use separate UPDATE statement for each column to avoid string construction
-        movie_id = update_values[-1]  # Last value is always movie_id
+        # Refactor to use a single parameterized UPDATE statement
+        # Construct the SET clause dynamically
+        set_clause = ", ".join(update_columns)
 
-        # Define a mapping of column names to their SQL update statements
-        column_update_queries = {
-            "director = ?": "UPDATE movies SET director = ? WHERE movie_id = ?",
-            "genres = ?": "UPDATE movies SET genres = ? WHERE movie_id = ?",
-            "rating = ?": "UPDATE movies SET rating = ? WHERE movie_id = ?",
-            "synopsis = ?": "UPDATE movies SET synopsis = ? WHERE movie_id = ?",
-            "tmdb_id = ?": "UPDATE movies SET tmdb_id = ? WHERE movie_id = ?",
-            "tmdb_rating = ?": "UPDATE movies SET tmdb_rating = ? WHERE movie_id = ?",
-            "release_date = ?": "UPDATE movies SET release_date = ? WHERE movie_id = ?",
-            "runtime = ?": "UPDATE movies SET runtime = ? WHERE movie_id = ?",
-            "poster_path = ?": "UPDATE movies SET poster_path = ? WHERE movie_id = ?",
-            "backdrop_path = ?": "UPDATE movies SET backdrop_path = ? WHERE movie_id = ?",
-            "overview = ?": "UPDATE movies SET overview = ? WHERE movie_id = ?",
-            "last_updated = ?": "UPDATE movies SET last_updated = ? WHERE movie_id = ?",
-        }
+        # Prepare the SQL query
+        query = f"UPDATE movies SET {set_clause} WHERE movie_id = ?"
 
-        # Execute updates dynamically based on the mapping
-        for i, col in enumerate(update_columns):
-            value = update_values[i]
-            query = column_update_queries.get(col)
-            if query:
-                c.execute(query, [value, movie_id])
+        # Execute the query with parameterized values
+        c.execute(query, update_values)
 
     conn.commit()
     conn.close()
