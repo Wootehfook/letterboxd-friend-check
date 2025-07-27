@@ -82,7 +82,7 @@ def search_movie(title, year=None):
         params["year"] = year
 
     try:
-        response = requests.get(SEARCH_MOVIE_URL, params=params, timeout=10)
+        response = requests.get(SEARCH_MOVIE_URL, params=params, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
 
         results = response.json().get("results", [])
