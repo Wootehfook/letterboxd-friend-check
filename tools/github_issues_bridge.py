@@ -150,19 +150,20 @@ class GitHubIssuesBridge:
 
             if result.returncode == 0:
                 url = result.stdout.strip()
-                # Security: Parse different URL formats safely
-                # GitHub Copilot 2025-07-27
-                if "github.com" in url:
-                    if url.startswith("https://"):
-                        # Format: https://github.com/owner/repo.git
-                        parts = url.replace(".git", "").split("/")
-                        return parts[-2] if len(parts) >= 2 else None
-                    elif url.startswith("git@"):
-                        # Format: git@github.com:owner/repo.git
-                        parts = url.replace(".git", "").split(":")
-                        if len(parts) >= 2:
-                            owner_repo = parts[-1].split("/")
-                            return owner_repo[0] if len(owner_repo) >= 2 else None
+                # Security: Parse different URL formats safely with proper validation
+                # Fixed: Use proper URL prefix validation instead of substring check
+                if url.startswith('git@github.com:'):
+                    # Handle SSH format: git@github.com:owner/repo.git
+                    ssh_path = url[len('git@github.com:'):]
+                    if '/' in ssh_path:
+                        owner_repo = ssh_path.replace('.git', '').split('/')
+                        return owner_repo[0] if len(owner_repo) >= 2 else None
+                elif url.startswith('https://github.com/'):
+                    # Handle HTTPS format: https://github.com/owner/repo.git
+                    https_path = url[len('https://github.com/'):]
+                    if '/' in https_path:
+                        owner_repo = https_path.replace('.git', '').split('/')
+                        return owner_repo[0] if len(owner_repo) >= 2 else None
 
         except (subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
             logger.error(f"Failed to get git remote: {e}")

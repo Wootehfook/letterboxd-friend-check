@@ -130,13 +130,19 @@ class GitHubBridge:
             result = subprocess.run(['git', 'remote', 'get-url', 'origin'], 
                                   capture_output=True, text=True, check=False)
             url = result.stdout.strip()
-            # Parse github.com/owner/repo format
-            if 'github.com' in url:
-                parts = url.split('/')
-                # Handle git@github.com:owner/repo.git format
-                if ':' in parts[-2]:
-                    return parts[-2].split(':')[-1]
-                return parts[-2]
+            
+            # Securely parse GitHub URLs with proper validation
+            if url.startswith('git@github.com:'):
+                # Handle SSH format: git@github.com:owner/repo.git
+                ssh_path = url[len('git@github.com:'):]
+                if '/' in ssh_path:
+                    return ssh_path.split('/')[0]
+            elif url.startswith('https://github.com/'):
+                # Handle HTTPS format: https://github.com/owner/repo.git
+                https_path = url[len('https://github.com/'):]
+                if '/' in https_path:
+                    return https_path.split('/')[0]
+            
             return None
         except Exception as e:
             logger.warning(f"Could not determine repo owner: {e}")
@@ -148,15 +154,25 @@ class GitHubBridge:
             result = subprocess.run(['git', 'remote', 'get-url', 'origin'], 
                                   capture_output=True, text=True, check=False)
             url = result.stdout.strip()
-            # Parse github.com/owner/repo format
-            if 'github.com' in url:
-                parts = url.split('/')
-                # Handle .git extension
-                repo = parts[-1]
-                if repo.endswith('.git'):
-                    repo = repo[:-4]
-                return repo
-            return None
+            
+            # Securely parse GitHub URLs with proper validation
+            repo_name = None
+            if url.startswith('git@github.com:'):
+                # Handle SSH format: git@github.com:owner/repo.git
+                ssh_path = url[len('git@github.com:'):]
+                if '/' in ssh_path:
+                    repo_name = ssh_path.split('/')[1]
+            elif url.startswith('https://github.com/'):
+                # Handle HTTPS format: https://github.com/owner/repo.git
+                https_path = url[len('https://github.com/'):]
+                if '/' in https_path:
+                    repo_name = https_path.split('/')[1]
+            
+            # Remove .git extension if present
+            if repo_name and repo_name.endswith('.git'):
+                repo_name = repo_name[:-4]
+            
+            return repo_name
         except Exception as e:
             logger.warning(f"Could not determine repo name: {e}")
             return None

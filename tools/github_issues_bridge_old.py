@@ -72,11 +72,18 @@ class GitHubIssuesBridge:
             result = subprocess.run(['git', 'remote', 'get-url', 'origin'], 
                                   capture_output=True, text=True, cwd='/workspaces/letterboxd-friend-check')
             url = result.stdout.strip()
-            if 'github.com' in url:
-                parts = url.split('/')
-                if ':' in parts[-2]:  # Handle git@github.com:owner/repo.git format
-                    return parts[-2].split(':')[-1]
-                return parts[-2]
+            
+            # Securely parse GitHub URLs with proper validation
+            if url.startswith('git@github.com:'):
+                # Handle SSH format: git@github.com:owner/repo.git
+                ssh_path = url[len('git@github.com:'):]
+                if '/' in ssh_path:
+                    return ssh_path.split('/')[0]
+            elif url.startswith('https://github.com/'):
+                # Handle HTTPS format: https://github.com/owner/repo.git  
+                https_path = url[len('https://github.com/'):]
+                if '/' in https_path:
+                    return https_path.split('/')[0]
         except Exception as e:
             logger.warning(f"Could not determine repo owner: {e}")
         return None
