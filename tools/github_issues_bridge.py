@@ -97,9 +97,7 @@ class GitHubIssuesBridge:
         if not self.repo_owner:
             raise ValueError("Repository owner could not be determined")
 
-        self.base_url = (
-            f"https://api.github.com/repos/{self.repo_owner}/{self.repo_name}"
-        )
+        self.base_url = f"https://api.github.com/repos/{self.repo_owner}/{self.repo_name}"
 
         # Performance: Configure secure session with retry logic
         # GitHub Copilot 2025-07-27
@@ -152,17 +150,17 @@ class GitHubIssuesBridge:
                 url = result.stdout.strip()
                 # Security: Parse different URL formats safely with proper validation
                 # Fixed: Use proper URL prefix validation instead of substring check
-                if url.startswith('git@github.com:'):
+                if url.startswith("git@github.com:"):
                     # Handle SSH format: git@github.com:owner/repo.git
-                    ssh_path = url[len('git@github.com:'):]
-                    if '/' in ssh_path:
-                        owner_repo = ssh_path.replace('.git', '').split('/')
+                    ssh_path = url[len("git@github.com:") :]
+                    if "/" in ssh_path:
+                        owner_repo = ssh_path.replace(".git", "").split("/")
                         return owner_repo[0] if len(owner_repo) >= 2 else None
-                elif url.startswith('https://github.com/'):
+                elif url.startswith("https://github.com/"):
                     # Handle HTTPS format: https://github.com/owner/repo.git
-                    https_path = url[len('https://github.com/'):]
-                    if '/' in https_path:
-                        owner_repo = https_path.replace('.git', '').split('/')
+                    https_path = url[len("https://github.com/") :]
+                    if "/" in https_path:
+                        owner_repo = https_path.replace(".git", "").split("/")
                         return owner_repo[0] if len(owner_repo) >= 2 else None
 
         except (subprocess.TimeoutExpired, subprocess.CalledProcessError) as e:
@@ -490,15 +488,8 @@ class GitHubIssuesBridge:
                 "letterboxd_friend_check/config.py",
                 "letterboxd_friend_check/api/letterboxd.py",
             ],
-            "build": [
-                "letterboxd_friend_check.spec",
-                "build_executable.py",
-                "requirements.txt"
-            ],
-            "database": [
-                "letterboxd_friend_check/data/database.py",
-                "movie_database.py"
-            ],
+            "build": ["letterboxd_friend_check.spec", "build_executable.py", "requirements.txt"],
+            "database": ["letterboxd_friend_check/data/database.py", "movie_database.py"],
             "api": ["letterboxd_friend_check/api/tmdb.py", "tmdb_api.py"],
         }
 
