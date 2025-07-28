@@ -1,0 +1,215 @@
+{
+  "project_metadata": {
+    "name": "Letterboxd Friend Check",
+    "version": "1.0.0",
+    "author": "Woo T. Fook",
+    "ai_attribution": "Built by AI (GitHub Copilot/Claude Sonnet 4)",
+    "license": "GNU GPL v3.0",
+    "last_updated": "2025-07-28",
+    "repository": "letterboxd-friend-check",
+    "primary_language": "Python",
+    "python_version": "3.11+"
+  },
+  
+  "project_purpose": {
+    "description": "Desktop application for comparing Letterboxd watchlists between friends",
+    "target_users": "Letterboxd users who want to find common movies with friends",
+    "key_features": [
+      "Watchlist comparison",
+      "TMDB movie details integration",
+      "Friend synchronization",
+      "Persistent data storage",
+      "Modern GUI with dark mode"
+    ]
+  },
+  
+  "technical_architecture": {
+    "frontend": {
+      "framework": "Tkinter",
+      "ui_components": ["SetupDialog", "Main GUI", "Settings"],
+      "accessibility": "WCAG 2.1 AA compliant"
+    },
+    "backend": {
+      "data_storage": "SQLite",
+      "api_integrations": ["TMDB API", "Letterboxd web scraping"],
+      "authentication": "Cookie-based session management"
+    },
+    "packaging": {
+      "tool": "PyInstaller",
+      "platforms": ["Windows", "Linux"],
+      "size": {"windows": "28.4MB", "linux": "31.0MB"}
+    }
+  },
+  
+  "directory_structure": {
+    "root_files": [
+      "LBoxFriendCheck.py",
+      "run_letterboxd.py",
+      "tmdb_api.py",
+      "movie_database.py",
+      "SetupDialog.py"
+    ],
+    "directories": {
+      "letterboxd_friend_check": "Package modules",
+      "scripts/build": "Build and deployment scripts",
+      "scripts/git": "Git automation tools",
+      "scripts/security": "Security scanning tools",
+      "tools": "Development utilities",
+      "tests": "Unit test suite",
+      "download": "Distribution files",
+      "docs": "Documentation"
+    }
+  },
+  
+  "development_guidelines": {
+    "code_standards": {
+      "style_guide": "PEP 8",
+      "line_length": 100,
+      "docstring_format": "Google",
+      "type_hints": "required",
+      "ai_attribution": "timestamp + model name in comments"
+    },
+    "security_requirements": {
+      "secrets_management": "environment_variables",
+      "input_validation": "required",
+      "url_parsing": "secure_prefix_validation",
+      "hash_algorithms": "SHA256_minimum",
+      "sensitive_data_handling": "multi_layer_protection"
+    },
+    "quality_checks": {
+      "linting": ["pylint", "flake8"],
+      "formatting": "black",
+      "security": ["bandit", "safety", "custom_scanner"],
+      "testing": "pytest"
+    }
+  },
+  
+  "automation_tools": {
+    "git_automation": {
+      "smart_commit": "scripts/git/quick_commit.py",
+      "pre_commit_check": "scripts/git/pre_commit_check.py",
+      "git_safe": "scripts/git/git_safe.py",
+      "features": [
+        "automatic_sensitive_file_exclusion",
+        "intelligent_commit_messages",
+        "content_scanning_for_secrets",
+        "file_categorization"
+      ]
+    },
+    "github_integration": {
+      "issues_bridge": "tools/github_issues_bridge.py",
+      "project_status": "tools/project_status_checker.py",
+      "capabilities": [
+        "issue_analysis_and_categorization",
+        "fix_workflow_generation",
+        "security_assessment",
+        "build_status_monitoring"
+      ]
+    },
+    "security_scanning": {
+      "custom_scanner": "scripts/security/security_scan.py",
+      "patterns_detected": 15,
+      "severity_levels": ["HIGH", "MEDIUM", "LOW"],
+      "auto_cleanup": true,
+      "report_lifetime_seconds": 30
+    }
+  },
+  
+  "security_implementation": {
+    "protection_layers": 5,
+    "excluded_patterns": [
+      "*.db", "*.sqlite3", "Cookie.json", "config.json",
+      "watchlist_*.json", "friends_*.json", "*_ENABLED.md",
+      "security_report*.txt", "bandit-*.json", "*.log"
+    ],
+    "scanning_tools": [
+      "custom_security_scanner",
+      "trufflehog",
+      "bandit",
+      "safety"
+    ],
+    "ci_cd_integration": {
+      "github_actions": true,
+      "automated_scans": "on_push_and_pr",
+      "scheduled_scans": "daily_2am_utc"
+    }
+  },
+  
+  "build_configuration": {
+    "tool": "PyInstaller",
+    "spec_file": "letterboxd_friend_check.spec",
+    "hidden_imports": [
+      "tkinter", "requests", "beautifulsoup4", "sqlite3",
+      "tmdbsimple", "PIL", "threading", "queue"
+    ],
+    "data_files": [
+      "config_template.json",
+      "LICENSE",
+      "README.md"
+    ],
+    "optimization": {
+      "upx_compression": false,
+      "console_mode": true
+    }
+  },
+  
+  "testing_strategy": {
+    "framework": "pytest",
+    "coverage_target": 80,
+    "test_categories": [
+      "unit_tests",
+      "integration_tests",
+      "security_tests",
+      "ui_tests"
+    ],
+    "ci_integration": true
+  },
+  
+  "recommended_enhancements": {
+    "high_priority": [
+      "Add async/await for API calls to improve performance",
+      "Implement caching layer for TMDB API responses",
+      "Add export functionality (CSV, JSON) for watchlist comparisons",
+      "Create REST API version for web integration"
+    ],
+    "medium_priority": [
+      "Add more comprehensive error messages with recovery suggestions",
+      "Implement user preferences persistence",
+      "Add batch processing for multiple friend comparisons",
+      "Create plugin system for additional movie databases"
+    ],
+    "low_priority": [
+      "Add themes beyond light/dark mode",
+      "Implement social sharing features",
+      "Add movie recommendation algorithm",
+      "Create mobile companion app"
+    ],
+    "technical_debt": [
+      "Refactor large methods in LBoxFriendCheck.py",
+      "Add more comprehensive type hints",
+      "Improve test coverage for edge cases",
+      "Standardize error handling patterns"
+    ]
+  },
+  
+  "ai_development_context": {
+    "best_practices": [
+      "Always check for sensitive data before committing",
+      "Use smart git automation for all commits",
+      "Run security scans before pushing code",
+      "Follow established project structure",
+      "Maintain comprehensive documentation"
+    ],
+    "common_patterns": {
+      "error_handling": "try_except_with_logging",
+      "api_calls": "requests_with_retry_logic",
+      "database_operations": "context_managers",
+      "ui_updates": "thread_safe_operations"
+    },
+    "testing_approach": {
+      "new_features": "write_tests_first",
+      "bug_fixes": "add_regression_tests",
+      "security_issues": "add_security_tests"
+    }
+  }
+}

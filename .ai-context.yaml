@@ -1,0 +1,54 @@
+# AI Assistant Context for Letterboxd Friend Check
+# This file helps AI assistants understand the project quickly
+
+project:
+  name: Letterboxd Friend Check
+  type: Desktop Application
+  language: Python 3.11+
+  ui_framework: Tkinter
+  database: SQLite
+  license: GNU GPL v3.0
+
+key_files:
+  entry_point: run_letterboxd.py
+  main_app: LBoxFriendCheck.py
+  api_integration: tmdb_api.py
+  database: movie_database.py
+  
+important_patterns:
+  - Use 100 character line limit
+  - Add AI attribution comments with timestamp
+  - Follow PEP 8 style guide
+  - Use Google docstring format
+  - Always validate URLs with startswith()
+  - Never commit sensitive files (*.db, config.json, Cookie.json)
+
+automation_tools:
+  git_commit: python scripts/git/quick_commit.py
+  security_scan: python scripts/security/security_scan.py
+  project_status: python tools/project_status_checker.py
+  issue_analysis: python tools/github_issues_bridge.py
+
+security_requirements:
+  - No hardcoded secrets
+  - Use environment variables for API keys
+  - Validate all user input
+  - Use SHA256 for hashing (not MD5)
+  - Auto-cleanup security reports after 30 seconds
+
+testing:
+  framework: pytest
+  run_tests: pytest
+  coverage: pytest --cov=letterboxd_friend_check
+
+common_tasks:
+  add_feature: Create in letterboxd_friend_check/ package
+  add_tool: Place in tools/ directory
+  add_test: Create in tests/ with test_ prefix
+  update_docs: Update README.md and relevant guides
+
+remember:
+  - Author is Woo T. Fook (built by AI)
+  - Security and quality are mandatory, not optional
+  - Use smart git automation for all commits
+  - Check PROJECT_SUMMARY_AI.json for detailed context
