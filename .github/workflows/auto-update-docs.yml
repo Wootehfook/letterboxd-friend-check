@@ -1,5 +1,10 @@
 name: 📚 Auto-Update Documentation
 
+# Security: Limit GITHUB_TOKEN permissions to minimum required
+permissions:
+  contents: write  # Required to commit and push documentation updates
+  pull-requests: read  # Required to read PR information
+
 on:
   push:
     branches: [ main, develop ]
