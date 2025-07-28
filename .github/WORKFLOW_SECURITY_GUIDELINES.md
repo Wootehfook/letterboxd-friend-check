@@ -155,10 +155,14 @@ permissions:
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
     
 jobs:
   update-docs:
     runs-on: ubuntu-latest
+    # IMPORTANT: Only auto-update on pushes, not PRs
+    if: github.event_name != 'pull_request'
     steps:
     - uses: actions/checkout@v4  # Pinned version
       with:
@@ -173,7 +177,20 @@ jobs:
         git config --local user.name "GitHub Action"
         git add .
         git commit -m "docs: auto-update" || exit 0
-        git push
+        # Use git push instead of action to avoid ref issues
+        git push origin HEAD:${{ github.ref_name }}
+        
+  validate-docs:
+    runs-on: ubuntu-latest
+    # IMPORTANT: Only validate on PRs, don't push
+    if: github.event_name == 'pull_request'
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}  # PR branch
+    
+    - name: Validate docs
+      run: python scripts/validate_docs.py
 ```
 
 ### **9. Monitoring & Compliance**
@@ -190,7 +207,60 @@ jobs:
 - **Dependabot**: Dependency updates
 - **Branch protection**: Require status checks
 
-### **10. Security Incident Response**
+### **10. Common GitHub Actions Issues & Fixes**
+
+#### **❌ Problem: "deny updating a hidden ref" Error**
+```
+! [remote rejected] HEAD -> refs/pull/7/merge (deny updating a hidden ref)
+```
+
+**Root Cause**: Workflow trying to push to PR merge ref (read-only)
+
+**✅ Solution**: Separate jobs for pushes vs PRs
+```yaml
+jobs:
+  update-docs:
+    if: github.event_name != 'pull_request'  # Only on pushes
+    steps:
+      - name: Push changes
+        run: git push origin HEAD:${{ github.ref_name }}
+  
+  validate-docs:
+    if: github.event_name == 'pull_request'  # Only on PRs
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}  # PR branch
+```
+
+#### **❌ Problem: Workflow Permissions Missing**
+```
+Error: Resource not accessible by integration
+```
+
+**Root Cause**: Missing or insufficient permissions
+
+**✅ Solution**: Explicit minimal permissions
+```yaml
+permissions:
+  contents: write  # For commits
+  pull-requests: read  # For PR context
+```
+
+#### **❌ Problem: Action Version Vulnerabilities**
+```
+Warning: Using unpinned action version
+```
+
+**Root Cause**: Using floating tags like `@main`
+
+**✅ Solution**: Pin to specific versions
+```yaml
+- uses: actions/checkout@v4  # Not @main
+- uses: actions/setup-python@v4  # Not @latest
+```
+
+### **11. Security Incident Response**
 
 If you discover a security issue in workflows:
 

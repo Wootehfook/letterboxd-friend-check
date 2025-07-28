@@ -18,6 +18,8 @@ jobs:
   update-docs:
     runs-on: ubuntu-latest
     name: 📝 Update Project Documentation
+    # Only run auto-updates on pushes to main/develop, not on PRs
+    if: github.event_name != 'pull_request'
     
     steps:
     - name: 📥 Checkout Repository
@@ -70,10 +72,10 @@ jobs:
     
     - name: 🚀 Push Changes
       if: steps.verify-changed-files.outputs.changed == 'true'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+      run: |
+        echo "🔄 Pushing documentation updates..."
+        git push origin HEAD:${{ github.ref_name }}
+        echo "✅ Documentation successfully updated"
     
     - name: 📋 Summary
       run: |
@@ -85,3 +87,51 @@ jobs:
           echo "ℹ️ Documentation was already up-to-date"
         fi
         echo "🕐 Last run: $(date -u)"
+
+  validate-docs:
+    runs-on: ubuntu-latest
+    name: 🔍 Validate Documentation (PR Check)
+    # Only run validation on PRs, not auto-updates
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: 📥 Checkout PR
+      uses: actions/checkout@v4
+      with:
+        # For PRs, checkout the head ref (the PR branch)
+        ref: ${{ github.head_ref }}
+        fetch-depth: 0
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: 🔍 Validate Documentation State
+      run: |
+        echo "🔄 Running documentation validation..."
+        python tools/documentation_maintainer.py
+        
+        echo "📊 Checking if documentation is up-to-date..."
+        if git diff --quiet HEAD -- PROJECT_SUMMARY.md PROJECT_SUMMARY_AI.json .ai-context.yaml .aicodex; then
+          echo "✅ Documentation is up-to-date with current project state"
+        else
+          echo "⚠️ Documentation appears to be out of sync"
+          echo "📝 Changes that would be made:"
+          git diff --name-only HEAD -- PROJECT_SUMMARY.md PROJECT_SUMMARY_AI.json .ai-context.yaml .aicodex
+          echo ""
+          echo "ℹ️ This is informational only - documentation will auto-update after merge"
+        fi
+    
+    - name: 📋 PR Documentation Check Summary
+      run: |
+        echo "📚 PR Documentation Validation Complete"
+        echo "======================================"
+        echo "✅ Documentation validation completed"
+        echo "ℹ️ Any needed updates will be applied automatically after merge"
+        echo "🕐 Validation run: $(date -u)"
