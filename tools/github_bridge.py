@@ -217,7 +217,8 @@ class GitHubBridge:
     def _cache_key(self, method, *args, **kwargs):
         """Generate cache key from method and arguments"""
         key_str = f"{method}:{args}:{sorted(kwargs.items())}"
-        return hashlib.md5(key_str.encode()).hexdigest()
+        # Use SHA256 for cache key generation for better security
+        return hashlib.sha256(key_str.encode()).hexdigest()[:16]
 
     # === ISSUE MANAGEMENT ===
     @cached_request()
