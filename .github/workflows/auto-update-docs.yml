@@ -1,0 +1,82 @@
+name: 📚 Auto-Update Documentation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    name: 📝 Update Project Documentation
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: 🔄 Run Documentation Maintenance
+      run: |
+        echo "🔄 Running documentation maintenance..."
+        python tools/documentation_maintainer.py
+    
+    - name: 📊 Check for Changes
+      id: verify-changed-files
+      run: |
+        echo "Checking for documentation changes..."
+        if git diff --quiet HEAD -- PROJECT_SUMMARY.md PROJECT_SUMMARY_AI.json .ai-context.yaml .aicodex; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "No documentation changes detected"
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "Documentation changes detected"
+          git status --porcelain
+        fi
+    
+    - name: 📝 Commit Documentation Updates
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add PROJECT_SUMMARY.md PROJECT_SUMMARY_AI.json .ai-context.yaml .aicodex
+        git commit -m "📚 Auto-update: Refresh project documentation
+        
+        - Updated timestamps and metadata
+        - Synchronized with current project state
+        - Automated by GitHub Actions
+        
+        [skip ci]"
+    
+    - name: 🚀 Push Changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+    
+    - name: 📋 Summary
+      run: |
+        echo "📚 Documentation Update Summary"
+        echo "=============================="
+        if [[ "${{ steps.verify-changed-files.outputs.changed }}" == "true" ]]; then
+          echo "✅ Documentation was updated and committed"
+        else
+          echo "ℹ️ Documentation was already up-to-date"
+        fi
+        echo "🕐 Last run: $(date -u)"
