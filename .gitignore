@@ -141,6 +141,12 @@ backup_dev_state_*/
 *.swp
 *.swo
 
+# Security reports
+bandit-report.json
+bandit-*.json
+security-report.json
+security-*.json
+
 # OS generated files
 .DS_Store
 .DS_Store?
