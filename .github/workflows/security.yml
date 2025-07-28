@@ -93,7 +93,7 @@ jobs:
       - name: Run Custom Security Scanner
         run: |
           echo "🔍 Running custom security scanner..."
-          if python security_scan.py; then
+          if python scripts/security/security_scan.py; then
             echo "✅ Custom security scanner completed successfully"
           else
             EXIT_CODE=$?
@@ -205,7 +205,7 @@ jobs:
           echo "🔍 Running Bandit security linter..."
           # Run bandit only on project Python files, not the entire directory
           # This avoids scanning .venv and other non-project directories
-          bandit -r *.py letterboxd_friend_check/ -f json -o bandit-report.json || true
+          bandit -r *.py letterboxd_friend_check/ scripts/ tools/ -f json -o bandit-report.json || true
           
           echo "📄 Bandit report generated - reviewing findings..."
           
