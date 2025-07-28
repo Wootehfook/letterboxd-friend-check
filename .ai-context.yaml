@@ -2,6 +2,7 @@
 # This file helps AI assistants understand the project quickly
 
 project:
+  last_updated: 2025-07-28
   name: Letterboxd Friend Check
   type: Desktop Application
   language: Python 3.11+

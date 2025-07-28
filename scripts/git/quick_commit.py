@@ -24,7 +24,7 @@ def main():
     args = parser.parse_args()
 
     # Build command for smart_git_automation.py
-    cmd = [sys.executable, "smart_git_automation.py"]
+    cmd = [sys.executable, "scripts/git/smart_git_automation.py"]
 
     if args.check:
         cmd.append("--dry-run")

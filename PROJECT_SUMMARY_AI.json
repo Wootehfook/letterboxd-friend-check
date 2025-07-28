@@ -10,7 +10,6 @@
     "primary_language": "Python",
     "python_version": "3.11+"
   },
-  
   "project_purpose": {
     "description": "Desktop application for comparing Letterboxd watchlists between friends",
     "target_users": "Letterboxd users who want to find common movies with friends",
@@ -22,25 +21,36 @@
       "Modern GUI with dark mode"
     ]
   },
-  
   "technical_architecture": {
     "frontend": {
       "framework": "Tkinter",
-      "ui_components": ["SetupDialog", "Main GUI", "Settings"],
+      "ui_components": [
+        "SetupDialog",
+        "Main GUI",
+        "Settings"
+      ],
       "accessibility": "WCAG 2.1 AA compliant"
     },
     "backend": {
       "data_storage": "SQLite",
-      "api_integrations": ["TMDB API", "Letterboxd web scraping"],
+      "api_integrations": [
+        "TMDB API",
+        "Letterboxd web scraping"
+      ],
       "authentication": "Cookie-based session management"
     },
     "packaging": {
       "tool": "PyInstaller",
-      "platforms": ["Windows", "Linux"],
-      "size": {"windows": "28.4MB", "linux": "31.0MB"}
+      "platforms": [
+        "Windows",
+        "Linux"
+      ],
+      "size": {
+        "windows": "28.4MB",
+        "linux": "31.0MB"
+      }
     }
   },
-  
   "directory_structure": {
     "root_files": [
       "LBoxFriendCheck.py",
@@ -60,7 +70,6 @@
       "docs": "Documentation"
     }
   },
-  
   "development_guidelines": {
     "code_standards": {
       "style_guide": "PEP 8",
@@ -77,13 +86,19 @@
       "sensitive_data_handling": "multi_layer_protection"
     },
     "quality_checks": {
-      "linting": ["pylint", "flake8"],
+      "linting": [
+        "pylint",
+        "flake8"
+      ],
       "formatting": "black",
-      "security": ["bandit", "safety", "custom_scanner"],
+      "security": [
+        "bandit",
+        "safety",
+        "custom_scanner"
+      ],
       "testing": "pytest"
     }
   },
-  
   "automation_tools": {
     "git_automation": {
       "smart_commit": "scripts/git/quick_commit.py",
@@ -109,18 +124,28 @@
     "security_scanning": {
       "custom_scanner": "scripts/security/security_scan.py",
       "patterns_detected": 15,
-      "severity_levels": ["HIGH", "MEDIUM", "LOW"],
+      "severity_levels": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
       "auto_cleanup": true,
       "report_lifetime_seconds": 30
     }
   },
-  
   "security_implementation": {
     "protection_layers": 5,
     "excluded_patterns": [
-      "*.db", "*.sqlite3", "Cookie.json", "config.json",
-      "watchlist_*.json", "friends_*.json", "*_ENABLED.md",
-      "security_report*.txt", "bandit-*.json", "*.log"
+      "*.db",
+      "*.sqlite3",
+      "Cookie.json",
+      "config.json",
+      "watchlist_*.json",
+      "friends_*.json",
+      "*_ENABLED.md",
+      "security_report*.txt",
+      "bandit-*.json",
+      "*.log"
     ],
     "scanning_tools": [
       "custom_security_scanner",
@@ -134,13 +159,18 @@
       "scheduled_scans": "daily_2am_utc"
     }
   },
-  
   "build_configuration": {
     "tool": "PyInstaller",
     "spec_file": "letterboxd_friend_check.spec",
     "hidden_imports": [
-      "tkinter", "requests", "beautifulsoup4", "sqlite3",
-      "tmdbsimple", "PIL", "threading", "queue"
+      "tkinter",
+      "requests",
+      "beautifulsoup4",
+      "sqlite3",
+      "tmdbsimple",
+      "PIL",
+      "threading",
+      "queue"
     ],
     "data_files": [
       "config_template.json",
@@ -152,7 +182,6 @@
       "console_mode": true
     }
   },
-  
   "testing_strategy": {
     "framework": "pytest",
     "coverage_target": 80,
@@ -164,7 +193,6 @@
     ],
     "ci_integration": true
   },
-  
   "recommended_enhancements": {
     "high_priority": [
       "Add async/await for API calls to improve performance",
@@ -191,7 +219,6 @@
       "Standardize error handling patterns"
     ]
   },
-  
   "ai_development_context": {
     "best_practices": [
       "Always check for sensitive data before committing",
@@ -211,5 +238,96 @@
       "bug_fixes": "add_regression_tests",
       "security_issues": "add_security_tests"
     }
+  },
+  "git_status": {
+    "current_branch": "main",
+    "recent_commits": [
+      "20033ac \ud83d\udcda Docs: Add comprehensive project documentation suite",
+      "7d2d7f4 \ud83d\uddc2\ufe0f Reorganize project structure for better maintainability (#5)",
+      "2731e5f Fix RuntimeError when sys.stdin is unavailable in GUI/executable mode (#3)",
+      "fcb2297 \ud83d\udd12 Security: Fix GitHub Actions workflow permissions and comprehensive security hardening",
+      "64a0100 Add comprehensive CI/CD workflows for branch protection"
+    ],
+    "remote_url": "https://github.com/Wootehfook/letterboxd-friend-check",
+    "last_updated": "2025-07-28T02:27:08.258379"
+  },
+  "current_structure": {
+    "core_files": [
+      "movie_database.py",
+      "run_letterboxd.py",
+      "setup.py",
+      "LBoxFriendCheck.py",
+      "tmdb_api.py",
+      "SetupDialog.py"
+    ],
+    "package_files": [
+      "letterboxd_friend_check/cli.py",
+      "letterboxd_friend_check/__init__.py",
+      "letterboxd_friend_check/new_methods.py",
+      "letterboxd_friend_check/config.py",
+      "letterboxd_friend_check/app.py",
+      "letterboxd_friend_check/utils/__init__.py",
+      "letterboxd_friend_check/utils/web.py",
+      "letterboxd_friend_check/utils/logging.py",
+      "letterboxd_friend_check/gui/__init__.py",
+      "letterboxd_friend_check/gui/setup_dialog.py",
+      "letterboxd_friend_check/gui/menu_methods.py",
+      "letterboxd_friend_check/data/__init__.py",
+      "letterboxd_friend_check/data/database.py",
+      "letterboxd_friend_check/api/__init__.py",
+      "letterboxd_friend_check/api/tmdb.py"
+    ],
+    "script_files": [
+      "scripts/build/build_executable.py",
+      "scripts/build/prepare_for_production.py",
+      "scripts/security/secure_cleanup.py",
+      "scripts/security/check_bandit.py",
+      "scripts/security/analyze_bandit.py",
+      "scripts/security/security_scan.py",
+      "scripts/git/setup_git_safe.py",
+      "scripts/git/smart_git_automation.py",
+      "scripts/git/quick_commit.py",
+      "scripts/git/git_safe.py",
+      "scripts/git/pre_commit_check.py",
+      "scripts/git/pre_commit_doc_update.py"
+    ],
+    "tool_files": [
+      "tools/documentation_maintainer.py",
+      "tools/setup_github_repo.py",
+      "tools/github_issues_bridge.py",
+      "tools/github_issues_bridge_old.py",
+      "tools/github_bridge.py",
+      "tools/lint_check.py",
+      "tools/project_status_checker.py",
+      "tools/create_clean_repo.py"
+    ],
+    "test_files": [
+      "tests/__init__.py",
+      "tests/test_letterboxd.py",
+      "tests/test_launcher_graceful_exit.py"
+    ],
+    "doc_files": [
+      "README.md",
+      "GIT_SAFE_README.md",
+      "SECURITY.md",
+      "ENHANCEMENT_RECOMMENDATIONS.md",
+      "PROJECT_REORGANIZATION.md",
+      "AI_INTEGRATION_GUIDE.md",
+      "CONTRIBUTING.md",
+      "SECURITY_REPORT_MANAGEMENT.md",
+      "DOCUMENTATION_INDEX.md",
+      "PROJECT_SUMMARY.md",
+      "GIT_AUTOMATION_GUIDE.md",
+      "CONTRIBUTOR_QUICK_REFERENCE.md",
+      "requirements.txt"
+    ]
+  },
+  "code_statistics": {
+    ".py": 909088,
+    ".js": 986,
+    ".md": 2230,
+    ".json": 4807,
+    ".yaml": 54,
+    ".yml": 493
   }
 }
