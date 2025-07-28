@@ -35,15 +35,21 @@ def main():
         if result.returncode == 0:
             print("✅ Documentation updated successfully")
 
-            # Check if any documentation files were modified
+            # Check if any documentation files were modified - Fix for issue #11
             git_status = subprocess.run(
-                ["git", "status", "--porcelain", "*.md", "*.json", "*.yaml"],
+                ["git", "status", "--porcelain"],
                 cwd=repo_root,
                 capture_output=True,
                 text=True,
             )
 
-            if git_status.stdout.strip():
+            modified_files = [
+                line.split()[-1]
+                for line in git_status.stdout.strip().splitlines()
+                if line.split()[-1].endswith((".md", ".json", ".yaml"))
+            ]
+
+            if modified_files:
                 print("📝 Documentation files were updated, adding to commit...")
                 # Add updated documentation files to the commit
                 files_to_add = ["PROJECT_SUMMARY.md", "PROJECT_SUMMARY_AI.json", ".ai-context.yaml"]

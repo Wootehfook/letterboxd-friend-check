@@ -183,10 +183,10 @@ session = requests.Session()
 logger = logging.getLogger(__name__)
 
 # Set logging level based on environment (can be overridden by config)
-log_level = os.getenv('LOG_LEVEL', 'INFO').upper()
-if log_level == 'DEBUG':
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+if log_level == "DEBUG":
     logger.setLevel(logging.DEBUG)
-elif log_level == 'INFO':
+elif log_level == "INFO":
     logger.setLevel(logging.INFO)
 else:
     logger.setLevel(logging.WARNING)
@@ -200,7 +200,7 @@ if not logger.handlers:
     # File handler for detailed logs
     file_handler = logging.FileHandler(output_log_path, encoding="utf-8", mode="a")
     # File logs can be more detailed
-    file_handler.setLevel(logging.DEBUG if log_level == 'DEBUG' else logging.INFO)
+    file_handler.setLevel(logging.DEBUG if log_level == "DEBUG" else logging.INFO)
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)

@@ -74,8 +74,16 @@ jobs:
       if: steps.verify-changed-files.outputs.changed == 'true'
       run: |
         echo "🔄 Pushing documentation updates..."
-        git push origin HEAD:${{ github.ref_name }}
-        echo "✅ Documentation successfully updated"
+        if git push origin HEAD:${{ github.ref_name }}; then
+          echo "✅ Documentation successfully updated"
+        else
+          echo "❌ Failed to push documentation updates"
+          echo "Git status:"
+          git status
+          echo "Git log (last 3 commits):"
+          git log --oneline -3
+          exit 1
+        fi
     
     - name: 📋 Summary
       run: |

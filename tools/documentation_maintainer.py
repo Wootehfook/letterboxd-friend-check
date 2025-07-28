@@ -139,6 +139,10 @@ class DocumentationMaintainer:
             else:
                 summary = {}
 
+            # Ensure project_metadata exists - Fix for issues #8, #9, #10
+            if "project_metadata" not in summary:
+                summary["project_metadata"] = {}
+
             # Update metadata
             summary["project_metadata"]["last_updated"] = datetime.now().strftime("%Y-%m-%d")
 
