@@ -7,12 +7,18 @@ A Python desktop application that compares your Letterboxd watchlist with friend
 ### 📥 **Download Ready-to-Use Version**
 **Just want to use the app? No Python needed!**
 
-1. **Go to [`download/`](download/)** folder in this repository
-2. **Download** `LetterboxdFriendCheck.exe` (28.4 MB)
-3. **Double-click** to run (Windows will show security warning - click "More info" → "Run anyway")
+#### Windows Users:
+1. **Download** `LetterboxdFriendCheck.exe` (28.4 MB)
+2. **Double-click** to run (Windows will show security warning - click "More info" → "Run anyway")
+3. **Enter your Letterboxd username** and start finding movies! 🎬
+
+#### Linux Users:
+1. **Download** `LetterboxdFriendCheck-Linux` (25.0 MB)
+2. **Make executable**: `chmod +x LetterboxdFriendCheck-Linux`
+3. **Run**: `./LetterboxdFriendCheck-Linux`
 4. **Enter your Letterboxd username** and start finding movies! 🎬
 
-[**→ Direct Download Link**](download/LetterboxdFriendCheck.exe) | [**→ Installation Guide**](download/INSTALL.md)
+[**→ Windows Download**](LetterboxdFriendCheck.exe) | [**→ Linux Download**](LetterboxdFriendCheck-Linux) | [**→ Installation Guide**](INSTALL.md)
 
 ---
 
