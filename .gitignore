@@ -55,15 +55,28 @@ data/config.json
 # Personal data
 Cookie.json
 letterboxd.db
+config.json
+*.db
+*.sqlite3
+
+# User generated files
+watchlist_*.json
+friends_*.json
+user_data/
+personal_data/
 
 # Temporary files
 *.tmp
 *.bak
 *.swp
 *.swo
+.DS_Store
+Thumbs.db
 
 # Output files
 Output.txt
+output_*.txt
+results_*.json
 
 # Development backups
 backup_dev_state_*/
@@ -110,6 +123,10 @@ distribution/
 # Executables (except in download folder)
 *.exe
 !download/*.exe
+
+# Linux executables
+LetterboxdFriendCheck-Linux
+download/LetterboxdFriendCheck-Linux
 
 # Large data files
 *.db
