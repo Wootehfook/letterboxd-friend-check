@@ -35,7 +35,8 @@ def main():
         if result.returncode == 0:
             print("✅ Documentation updated successfully")
 
-            # Check if any documentation files were modified - Fix for issue #11
+            # Check if any documentation files were modified to ensure they are included in the commit.
+            # This addresses issue #11, where updated documentation files were not being committed automatically.
             git_status = subprocess.run(
                 ["git", "status", "--porcelain"],
                 cwd=repo_root,
