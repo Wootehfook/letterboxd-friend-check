@@ -84,5 +84,7 @@
     "gitlens.codeLens.recentChange.enabled": true,
     "gitlens.statusBar.enabled": true,
     "gitlens.views.repositories.files.layout": "tree",
-    "gitlens.views.fileHistory.enabled": true
+    "gitlens.views.fileHistory.enabled": true,
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": []
 }
