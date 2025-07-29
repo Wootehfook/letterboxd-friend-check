@@ -116,12 +116,24 @@ class DocumentationMaintainer:
     def _count_lines_of_code(self) -> Dict[str, int]:
         """Count lines of code by file type (project files only)."""
         extensions = {".py": 0, ".js": 0, ".md": 0, ".json": 0, ".yaml": 0, ".yml": 0}
-        
+
         # Exclude directories that contain external dependencies or generated files
         excluded_dirs = {
-            "__pycache__", ".git", "node_modules", "venv", ".venv",
-            "env", ".env", "build", "dist", ".pytest_cache", ".mypy_cache",
-            "site-packages", ".tox", "htmlcov", ".coverage"
+            "__pycache__",
+            ".git",
+            "node_modules",
+            "venv",
+            ".venv",
+            "env",
+            ".env",
+            "build",
+            "dist",
+            ".pytest_cache",
+            ".mypy_cache",
+            "site-packages",
+            ".tox",
+            "htmlcov",
+            ".coverage",
         }
 
         for ext in extensions.keys():
@@ -129,7 +141,7 @@ class DocumentationMaintainer:
                 # Skip files in excluded directories
                 if any(excluded_dir in file.parts for excluded_dir in excluded_dirs):
                     continue
-                
+
                 # Only count files in the project structure
                 relative_path = file.relative_to(self.repo_path)
                 if file.is_file() and relative_path.parts[0] not in excluded_dirs:
@@ -227,13 +239,12 @@ class DocumentationMaintainer:
 
                 # Update the last updated date using regex for robustness
                 import re
+
                 current_date = datetime.now().strftime("%B %d, %Y")
-                
+
                 # Match any date in "Last Updated: <date>" format
                 content = re.sub(
-                    r"\*Last Updated: .*?\*",
-                    f"*Last Updated: {current_date}*",
-                    content
+                    r"\*Last Updated: .*?\*", f"*Last Updated: {current_date}*", content
                 )
 
                 with open(summary_path, "w") as f:
