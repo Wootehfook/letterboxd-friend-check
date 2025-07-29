@@ -5,7 +5,7 @@
     "author": "Woo T. Fook",
     "ai_attribution": "Built by AI (GitHub Copilot/Claude Sonnet 4)",
     "license": "GNU GPL v3.0",
-    "last_updated": "2025-07-28",
+    "last_updated": "2025-07-29",
     "repository": "letterboxd-friend-check",
     "primary_language": "Python",
     "python_version": "3.11+"
@@ -240,20 +240,24 @@
     }
   },
   "git_status": {
-    "current_branch": "main",
+    "current_branch": "feature/ai-integration-automation",
     "recent_commits": [
-      "20033ac \ud83d\udcda Docs: Add comprehensive project documentation suite",
-      "7d2d7f4 \ud83d\uddc2\ufe0f Reorganize project structure for better maintainability (#5)",
-      "2731e5f Fix RuntimeError when sys.stdin is unavailable in GUI/executable mode (#3)",
-      "fcb2297 \ud83d\udd12 Security: Fix GitHub Actions workflow permissions and comprehensive security hardening",
-      "64a0100 Add comprehensive CI/CD workflows for branch protection"
+      "b083399 \ud83d\udd27 fix: Resolve multiple Copilot AI Review issues",
+      "85c859e \ud83d\udd12 security: Comprehensive Copilot AI Review fixes and code quality improvements",
+      "3b53c78 \ud83d\udd27 fix: Resolve GitHub Actions PR push issue and enhance workflow security",
+      "abb0852 \ud83d\udd12 security: Fix GitHub Actions permissions and add security guidelines",
+      "d3c69e1 \ud83d\udd27 Improve: Refine AI integration and documentation automation"
     ],
     "remote_url": "https://github.com/Wootehfook/letterboxd-friend-check",
-    "last_updated": "2025-07-28T02:27:08.258379"
+    "last_updated": "2025-07-29T00:26:05.685407"
   },
   "current_structure": {
     "core_files": [
       "movie_database.py",
+      "github_issues_bridge_v2.py",
+      "github_issues_bridge.py",
+      "letterboxd_bridge.py",
+      "github_bridge.py",
       "run_letterboxd.py",
       "setup.py",
       "LBoxFriendCheck.py",
@@ -278,8 +282,6 @@
       "letterboxd_friend_check/api/tmdb.py"
     ],
     "script_files": [
-      "scripts/build/build_executable.py",
-      "scripts/build/prepare_for_production.py",
       "scripts/security/secure_cleanup.py",
       "scripts/security/check_bandit.py",
       "scripts/security/analyze_bandit.py",
@@ -298,6 +300,7 @@
       "tools/github_issues_bridge_old.py",
       "tools/github_bridge.py",
       "tools/lint_check.py",
+      "tools/github_bridge_fixed.py",
       "tools/project_status_checker.py",
       "tools/create_clean_repo.py"
     ],
@@ -318,16 +321,17 @@
       "DOCUMENTATION_INDEX.md",
       "PROJECT_SUMMARY.md",
       "GIT_AUTOMATION_GUIDE.md",
+      ".security-fixes.md",
       "CONTRIBUTOR_QUICK_REFERENCE.md",
       "requirements.txt"
     ]
   },
   "code_statistics": {
-    ".py": 909088,
-    ".js": 986,
-    ".md": 2230,
-    ".json": 4807,
-    ".yaml": 54,
-    ".yml": 493
+    ".py": 10974,
+    ".js": 0,
+    ".md": 2589,
+    ".json": 977,
+    ".yaml": 55,
+    ".yml": 576
   }
 }

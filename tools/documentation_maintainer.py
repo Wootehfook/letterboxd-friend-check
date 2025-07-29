@@ -114,16 +114,30 @@ class DocumentationMaintainer:
             return {"error": str(e), "last_updated": datetime.now().isoformat()}
 
     def _count_lines_of_code(self) -> Dict[str, int]:
-        """Count lines of code by file type."""
+        """Count lines of code by file type (project files only)."""
         extensions = {".py": 0, ".js": 0, ".md": 0, ".json": 0, ".yaml": 0, ".yml": 0}
+        
+        # Exclude directories that contain external dependencies or generated files
+        excluded_dirs = {
+            "__pycache__", ".git", "node_modules", "venv", ".venv",
+            "env", ".env", "build", "dist", ".pytest_cache", ".mypy_cache",
+            "site-packages", ".tox", "htmlcov", ".coverage"
+        }
 
         for ext in extensions.keys():
             for file in self.repo_path.rglob(f"*{ext}"):
-                try:
-                    with open(file, "r", encoding="utf-8", errors="ignore") as f:
-                        extensions[ext] += len(f.readlines())
-                except Exception:
+                # Skip files in excluded directories
+                if any(excluded_dir in file.parts for excluded_dir in excluded_dirs):
                     continue
+                
+                # Only count files in the project structure
+                relative_path = file.relative_to(self.repo_path)
+                if file.is_file() and relative_path.parts[0] not in excluded_dirs:
+                    try:
+                        with open(file, "r", encoding="utf-8", errors="ignore") as f:
+                            extensions[ext] += len(f.readlines())
+                    except Exception:
+                        continue
 
         return extensions
 
@@ -211,10 +225,15 @@ class DocumentationMaintainer:
                 with open(summary_path, "r") as f:
                     content = f.read()
 
-                # Update the last updated date
+                # Update the last updated date using regex for robustness
+                import re
                 current_date = datetime.now().strftime("%B %d, %Y")
-                content = content.replace(
-                    "*Last Updated: July 28, 2025*", f"*Last Updated: {current_date}*"
+                
+                # Match any date in "Last Updated: <date>" format
+                content = re.sub(
+                    r"\*Last Updated: .*?\*",
+                    f"*Last Updated: {current_date}*",
+                    content
                 )
 
                 with open(summary_path, "w") as f:

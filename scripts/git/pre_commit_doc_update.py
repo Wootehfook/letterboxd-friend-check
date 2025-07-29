@@ -43,15 +43,17 @@ def main():
                 text=True,
             )
 
-            modified_files = [
-                line.split()[-1]
-                for line in git_status.stdout.strip().splitlines()
-                if line.split()[-1].endswith((".md", ".json", ".yaml"))
-            ]
+            # Filter for documentation files instead of using glob patterns
+            modified_files = []
+            for line in git_status.stdout.strip().splitlines():
+                if line:
+                    filename = line.split()[-1]
+                    if filename.endswith((".md", ".json", ".yaml", ".yml")):
+                        modified_files.append(filename)
 
             if modified_files:
                 print("📝 Documentation files were updated, adding to commit...")
-                # Add updated documentation files to the commit
+                # Add specific updated documentation files to the commit
                 files_to_add = ["PROJECT_SUMMARY.md", "PROJECT_SUMMARY_AI.json", ".ai-context.yaml"]
                 subprocess.run(["git", "add"] + files_to_add, cwd=repo_root)
                 print("✅ Updated documentation files added to commit")
