@@ -181,7 +181,16 @@ session = requests.Session()
 
 # --- Setup Logging ---
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+
+# Set logging level based on environment (can be overridden by config)
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+if log_level == "DEBUG":
+    logger.setLevel(logging.DEBUG)
+elif log_level == "INFO":
+    logger.setLevel(logging.INFO)
+else:
+    logger.setLevel(logging.WARNING)
+
 # Prevent duplicate handlers if the script is reloaded
 if not logger.handlers:
     # Use a path relative to the script file for portability
@@ -190,7 +199,8 @@ if not logger.handlers:
 
     # File handler for detailed logs
     file_handler = logging.FileHandler(output_log_path, encoding="utf-8", mode="a")
-    file_handler.setLevel(logging.DEBUG)
+    # File logs can be more detailed
+    file_handler.setLevel(logging.DEBUG if log_level == "DEBUG" else logging.INFO)
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)

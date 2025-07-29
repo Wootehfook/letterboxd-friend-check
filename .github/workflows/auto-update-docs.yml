@@ -1,0 +1,165 @@
+name: 📚 Auto-Update Documentation
+
+# Security: Limit GITHUB_TOKEN permissions to minimum required
+permissions:
+  contents: write  # Required to commit and push documentation updates
+  pull-requests: read  # Required to read PR information
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+
+# Define documentation files in one place to avoid duplication
+env:
+  DOC_FILES: "PROJECT_SUMMARY.md PROJECT_SUMMARY_AI.json .ai-context.yaml .aicodex"
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    name: 📝 Update Project Documentation
+    # Only run auto-updates on pushes to main/develop, not on PRs
+    if: github.event_name != 'pull_request'
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: 🔄 Run Documentation Maintenance
+      run: |
+        echo "🔄 Running documentation maintenance..."
+        python tools/documentation_maintainer.py
+    
+    - name: 📊 Check for Changes
+      id: verify-changed-files
+      run: |
+        echo "Checking for documentation changes..."
+        if git diff --quiet HEAD -- $DOC_FILES; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "No documentation changes detected"
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "Documentation changes detected"
+          git status --porcelain
+        fi
+    
+    - name: 📝 Commit Documentation Updates
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add $DOC_FILES
+        git commit -m "📚 Auto-update: Refresh project documentation
+        
+        - Updated timestamps and metadata
+        - Synchronized with current project state
+        - Automated by GitHub Actions
+        
+        [skip ci]"
+    
+    - name: 🚀 Push Changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        echo "🔄 Pushing documentation updates..."
+        
+        # Enhanced error handling for git push operations
+        if git push origin HEAD:${{ github.ref_name }}; then
+          echo "✅ Documentation successfully updated"
+        else
+          exit_code=$?
+          echo "❌ Failed to push documentation updates (exit code: $exit_code)"
+          echo ""
+          echo "🔍 Diagnostic information:"
+          echo "Current branch: $(git branch --show-current)"
+          echo "Remote URL: $(git remote get-url origin)"
+          echo "Git status:"
+          git status --short
+          echo ""
+          echo "Recent commits:"
+          git log --oneline -3
+          echo ""
+          echo "🔄 Attempting to fetch and retry..."
+          git fetch origin
+          if git push origin HEAD:${{ github.ref_name }}; then
+            echo "✅ Push succeeded on retry"
+          else
+            echo "❌ Push failed on retry, manual intervention may be required"
+            exit 1
+          fi
+        fi
+    
+    - name: 📋 Summary
+      run: |
+        echo "📚 Documentation Update Summary"
+        echo "=============================="
+        if [[ "${{ steps.verify-changed-files.outputs.changed }}" == "true" ]]; then
+          echo "✅ Documentation was updated and committed"
+        else
+          echo "ℹ️ Documentation was already up-to-date"
+        fi
+        echo "🕐 Last run: $(date -u)"
+
+  validate-docs:
+    runs-on: ubuntu-latest
+    name: 🔍 Validate Documentation (PR Check)
+    # Only run validation on PRs, not auto-updates
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: 📥 Checkout PR
+      uses: actions/checkout@v4
+      with:
+        # For PRs, checkout the head ref (the PR branch)
+        ref: ${{ github.head_ref }}
+        fetch-depth: 0
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 📦 Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: 🔍 Validate Documentation State
+      run: |
+        echo "🔄 Running documentation validation..."
+        python tools/documentation_maintainer.py
+        
+        echo "📊 Checking if documentation is up-to-date..."
+        if git diff --quiet HEAD -- $DOC_FILES; then
+          echo "✅ Documentation is up-to-date with current project state"
+        else
+          echo "⚠️ Documentation appears to be out of sync"
+          echo "📝 Changes that would be made:"
+          git diff --name-only HEAD -- $DOC_FILES
+          echo ""
+          echo "ℹ️ This is informational only - documentation will auto-update after merge"
+        fi
+    
+    - name: 📋 PR Documentation Check Summary
+      run: |
+        echo "📚 PR Documentation Validation Complete"
+        echo "======================================"
+        echo "✅ Documentation validation completed"
+        echo "ℹ️ Any needed updates will be applied automatically after merge"
+        echo "🕐 Validation run: $(date -u)"

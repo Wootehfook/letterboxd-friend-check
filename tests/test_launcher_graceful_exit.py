@@ -14,43 +14,49 @@ class TestLauncherGracefulExit(unittest.TestCase):
 
     def test_graceful_exit_with_eoferror(self):
         """Test that launcher handles EOFError gracefully."""
-        with patch('builtins.input', side_effect=EOFError()):
+        with patch("builtins.input", side_effect=EOFError()):
             try:
-                # This should not raise an exception
-                code = 'try:\n    input("\\nPress Enter to exit...")\nexcept (EOFError, KeyboardInterrupt, RuntimeError):\n    pass'
-                exec(code)
+                # Test the exception handling directly instead of using exec()
+                try:
+                    input("\nPress Enter to exit...")
+                except (EOFError, KeyboardInterrupt, RuntimeError):
+                    pass  # This is the expected behavior
             except EOFError:
                 self.fail("EOFError should be caught and handled gracefully")
 
     def test_graceful_exit_with_keyboard_interrupt(self):
         """Test that launcher handles KeyboardInterrupt gracefully."""
-        with patch('builtins.input', side_effect=KeyboardInterrupt()):
+        with patch("builtins.input", side_effect=KeyboardInterrupt()):
             try:
-                # This should not raise an exception
-                code = 'try:\n    input("\\nPress Enter to exit...")\nexcept (EOFError, KeyboardInterrupt, RuntimeError):\n    pass'
-                exec(code)
+                # Test the exception handling directly instead of using exec()
+                try:
+                    input("\nPress Enter to exit...")
+                except (EOFError, KeyboardInterrupt, RuntimeError):
+                    pass  # This is the expected behavior
             except KeyboardInterrupt:
                 self.fail("KeyboardInterrupt should be caught and handled gracefully")
 
     def test_graceful_exit_with_runtime_error(self):
         """Test that launcher handles RuntimeError (lost sys.stdin) gracefully."""
-        with patch('builtins.input', side_effect=RuntimeError("lost sys.stdin")):
+        with patch("builtins.input", side_effect=RuntimeError("lost sys.stdin")):
             try:
-                # This should not raise an exception
-                code = 'try:\n    input("\\nPress Enter to exit...")\nexcept (EOFError, KeyboardInterrupt, RuntimeError):\n    pass'
-                exec(code)
+                # Test the exception handling directly instead of using exec()
+                try:
+                    input("\nPress Enter to exit...")
+                except (EOFError, KeyboardInterrupt, RuntimeError):
+                    pass  # This is the expected behavior
             except RuntimeError:
                 self.fail("RuntimeError should be caught and handled gracefully")
 
     def test_exit_handling_code_syntax(self):
         """Test that the exit handling code has correct syntax and exceptions."""
         # Read the actual file content
-        with open('run_letterboxd.py', 'r') as f:
+        with open("run_letterboxd.py", "r") as f:
             content = f.read()
 
         # Check that RuntimeError is included in the exception handling
-        self.assertIn('RuntimeError', content)
-        expected_except = 'except (EOFError, KeyboardInterrupt, RuntimeError):'
+        self.assertIn("RuntimeError", content)
+        expected_except = "except (EOFError, KeyboardInterrupt, RuntimeError):"
         self.assertIn(expected_except, content)
 
     def test_mock_stdin_unavailable(self):
@@ -59,8 +65,7 @@ class TestLauncherGracefulExit(unittest.TestCase):
         original_stdin = sys.stdin
         try:
             sys.stdin = None
-            with patch('builtins.input',
-                       side_effect=RuntimeError("lost sys.stdin")):
+            with patch("builtins.input", side_effect=RuntimeError("lost sys.stdin")):
                 # Import and test the specific exit handling logic
                 try:
                     # Simulate the exit prompt logic

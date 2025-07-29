@@ -1,0 +1,111 @@
+# AI Assistant Instructions for Letterboxd Friend Check
+# This file provides context for AI coding assistants
+# Format: Standard AI context file following emerging conventions
+
+## Project Overview
+**Name**: Letterboxd Friend Check  
+**Type**: Desktop Application  
+**Language**: Python 3.11+  
+**Framework**: Tkinter (GUI), SQLite (Database)  
+**License**: GNU GPL v3.0  
+**Author**: Woo T. Fook (Built by AI)  
+
+## Quick Context
+This is a desktop application that helps Letterboxd users find common movies in their friends' watchlists. The project emphasizes security, code quality, and professional development practices with comprehensive automation.
+
+## Key Files
+- **Entry Point**: `run_letterboxd.py`
+- **Main App**: `LBoxFriendCheck.py`
+- **API Integration**: `tmdb_api.py`
+- **Database**: `movie_database.py`
+- **Package**: `letterboxd_friend_check/` (modular structure)
+
+## Development Standards
+- **Line Limit**: 100 characters
+- **Style**: PEP 8 compliant
+- **Docstrings**: Google format required
+- **Type Hints**: Required for all functions
+- **AI Attribution**: Add timestamp comments for AI-generated code
+- **Security**: No hardcoded secrets, validate all inputs
+
+## Security Requirements (Critical)
+- Never commit: `*.db`, `config.json`, `Cookie.json`, `security_report*.txt`
+- Always use `startswith()` for URL validation (not substring checks)
+- Use SHA256 for hashing (never MD5)
+- Environment variables for API keys
+- Auto-cleanup security reports after 30 seconds
+
+## Automation Tools
+```bash
+# Safe commit with security checks
+python scripts/git/quick_commit.py
+
+# Security scanning
+python scripts/security/security_scan.py
+
+# Project status check
+python tools/project_status_checker.py
+
+# GitHub issue analysis
+python tools/github_issues_bridge.py
+
+# Update documentation
+python tools/documentation_maintainer.py
+```
+
+## Testing & Quality
+```bash
+# Run tests
+pytest
+
+# Format code
+black . --line-length 100
+
+# Lint code
+pylint *.py letterboxd_friend_check/ scripts/ tools/
+
+# Security scan
+python scripts/security/security_scan.py
+```
+
+## Directory Structure
+```
+letterboxd-friend-check/
+├── Core App (root level)
+├── letterboxd_friend_check/ (package modules)
+├── scripts/ (build, git, security automation)
+├── tools/ (development utilities)
+├── tests/ (unit tests)
+└── download/ (distribution files)
+```
+
+## Common Tasks
+- **Add Feature**: Create in `letterboxd_friend_check/` package
+- **Add Tool**: Place in `tools/` directory  
+- **Add Test**: Create in `tests/` with `test_` prefix
+- **Update Docs**: Update README.md and relevant guides
+
+## AI Development Guidelines
+1. Always check for sensitive data before suggesting code
+2. Use established automation tools for commits
+3. Follow project security standards strictly
+4. Reference `PROJECT_SUMMARY_AI.json` for detailed context
+5. Maintain documentation when making changes
+6. Use smart git automation for all commits
+7. Run security scans before finalizing code
+
+## Important Notes
+- Security and quality are mandatory, not optional
+- Use multi-layer protection for sensitive data
+- This project serves as a template for professional development practices
+- All AI-generated code should be attributed with timestamps
+
+## Reference Files
+- `PROJECT_SUMMARY.md` - Human-readable overview
+- `PROJECT_SUMMARY_AI.json` - Structured metadata for AI
+- `CONTRIBUTOR_QUICK_REFERENCE.md` - Developer commands
+- `ENHANCEMENT_RECOMMENDATIONS.md` - Improvement suggestions
+
+---
+*Last Updated: 2025-07-28*  
+*This file is automatically maintained - see tools/documentation_maintainer.py*
