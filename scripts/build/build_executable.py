@@ -283,7 +283,9 @@ app = BUNDLE(
                 if source_path.exists():
                     target_path = self.download_dir / "LetterboxdFriendCheck-macOS"
                     shutil.move(str(source_path), str(target_path))
-                    os.chmod(target_path, 0o755)
+                    # Set executable permissions for macOS binary (owner rwx only)
+                    # Required for executable files on Unix-like systems
+                    os.chmod(target_path, 0o700)  # nosec B103
                     print(f"Moved macOS executable to: {target_path}")
         else:
             # Windows and Linux
@@ -299,9 +301,10 @@ app = BUNDLE(
                 target_path = self.download_dir / target_name
                 shutil.move(str(source_path), str(target_path))
 
-                # Make executable on Unix-like systems
+                # Make executable on Unix-like systems (owner rwx only)
+                # Required for executable files on Unix-like systems
                 if platform_name != "windows":
-                    os.chmod(target_path, 0o755)
+                    os.chmod(target_path, 0o700)  # nosec B103
 
                 # Get file size
                 size_mb = target_path.stat().st_size / (1024 * 1024)
