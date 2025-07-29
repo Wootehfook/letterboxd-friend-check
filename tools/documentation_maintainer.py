@@ -165,7 +165,8 @@ class DocumentationMaintainer:
             else:
                 summary = {}
 
-            # Ensure project_metadata exists - Fix for issues #8, #9, #10
+            # Ensure project_metadata exists to prevent errors when accessing metadata.
+            # This addresses issues where the summary file was missing the project_metadata key.
             if "project_metadata" not in summary:
                 summary["project_metadata"] = {}
 
